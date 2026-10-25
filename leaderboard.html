@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="celestial">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leaderboard — Celestial Syndicate</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🏆</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.hero-lb{padding:160px 0 80px;text-align:center;position:relative;z-index:2}
+.hero-lb h1{font-family:var(--font-display);font-size:clamp(2.4rem,8vw,5rem);font-weight:900;letter-spacing:.04em;background:linear-gradient(120deg,#fff,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 40px rgba(167,139,250,.4))}
+.hero-lb p{color:var(--muted);margin-top:20px;font-size:1.05rem}
+.filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:50px 0;position:relative;z-index:2}
+.filters button{padding:11px 26px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);font-family:var(--font-body);font-weight:700;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;backdrop-filter:blur(10px)}
+.filters button:hover{color:#fff;border-color:var(--accent)}
+.filters button.active{color:#000;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;box-shadow:0 10px 30px -8px var(--accent)}
+.podium-wrap{position:relative;z-index:2;margin-bottom:60px}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:end;max-width:1000px;margin:0 auto}
+.p-card{padding:32px 24px;border-radius:24px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--border);backdrop-filter:blur(20px);position:relative;transition:transform .4s,box-shadow .4s}
+.p-card:hover{transform:translateY(-8px)}
+.p-card.gold{border-color:rgba(252,211,77,.5);background:linear-gradient(180deg,rgba(252,211,77,.14),rgba(252,211,77,.02));box-shadow:0 20px 60px -20px rgba(252,211,77,.6);transform:translateY(-16px)}
+.p-card.gold:hover{transform:translateY(-24px)}
+.p-card.silver{border-color:rgba(203,213,225,.4);background:linear-gradient(180deg,rgba(203,213,225,.08),transparent)}
+.p-card.bronze{border-color:rgba(217,119,6,.4);background:linear-gradient(180deg,rgba(217,119,6,.08),transparent)}
+.p-rank-tag{display:inline-block;padding:5px 16px;border-radius:999px;font-family:var(--font-display);font-size:.7rem;letter-spacing:.2em;font-weight:900;margin-bottom:14px;background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--accent-3)}
+.p-card.gold .p-rank-tag{color:#fcd34d;border-color:rgba(252,211,77,.5)}
+.p-medal{font-size:2.5rem;margin-bottom:14px;line-height:1;filter:drop-shadow(0 0 20px currentColor)}
+.p-name{font-weight:700;font-size:1.15rem;color:#fff;margin-bottom:6px}
+.p-gang{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;font-weight:700}
+.p-pts{font-family:var(--font-display);font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.p-card.gold .p-pts{background:linear-gradient(135deg,#fcd34d,#f59e0b);-webkit-background-clip:text;background-clip:text}
+.table-wrap{max-width:1000px;margin:0 auto;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:20px;overflow:hidden;backdrop-filter:blur(20px);position:relative;z-index:2}
+table{width:100%;border-collapse:collapse}
+thead{background:rgba(167,139,250,.08)}
+th{padding:18px 22px;text-align:left;font-family:var(--font-display);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;border-bottom:1px solid var(--border)}
+td{padding:16px 22px;border-bottom:1px solid rgba(255,255,255,.04);font-weight:500}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(167,139,250,.04)}
+.rank-cell{font-family:var(--font-display);font-weight:900;color:var(--accent-3);font-size:.9rem;width:70px}
+.name-cell{font-weight:700;color:#fff}
+.gang-tag{display:inline-block;padding:4px 14px;border-radius:8px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;border:1px solid}
+.gang-tag.celestial{color:#a78bfa;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.1)}
+.gang-tag.asuka{color:#e11d2a;border-color:rgba(225,29,42,.4);background:rgba(225,29,42,.1)}
+.gang-tag.zm{color:#ff3d8b;border-color:rgba(255,61,139,.4);background:rgba(255,61,139,.1)}
+.gang-tag.toman{color:#fbbf24;border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.1)}
+.pts-cell{font-family:var(--font-display);font-weight:700;color:var(--accent-2);text-align:right}
+.kd-cell{color:var(--muted);text-align:right;font-family:var(--font-display);font-weight:700}
+.empty-state{padding:80px 30px;text-align:center;color:var(--muted)}
+@media(max-width:720px){
+  .podium{grid-template-columns:1fr}
+  .p-card.gold{order:-1;transform:none}
+  .p-card.gold:hover{transform:translateY(-8px)}
+  thead th:nth-child(4),tbody td:nth-child(4){display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="preloader"><div class="preloader-logo">LEADERBOARD</div><div class="preloader-bar"></div></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">CELESTIAL ✦ SYNDICATE</a>
+    <div class="nav-links">
+      <a href="index.html">Hub</a>
+      <a href="asuka.html">ASUKA</a>
+      <a href="zm.html">ZM</a>
+      <a href="toman.html">TOMAN</a>
+      <a href="leaderboard.html" class="active">Leaderboard</a>
+      <a href="apply.html">Apply</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero-lb">
+  <div class="container">
+    <h1>HALL OF LEGENDS</h1>
+    <p>Top performers across the entire Celestial network — updated every war cycle.</p>
+  </div>
+</section>
+
+<div class="filters" id="filters">
+  <button data-gang="all" class="active">All Gangs</button>
+  <button data-gang="Celestial Syndicate">Celestial</button>
+  <button data-gang="ASUKA">ASUKA</button>
+  <button data-gang="ZM">ZM</button>
+  <button data-gang="TOMAN">TOMAN</button>
+</div>
+
+<section style="padding-top:0;">
+  <div class="container">
+    <div class="podium-wrap"><div class="podium" id="podium"></div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Player</th><th>Gang</th><th>K/D</th><th style="text-align:right;">Points</th></tr></thead>
+        <tbody id="board"><tr><td colspan="5" class="empty-state">Loading rankings…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer style="padding:60px 0;border-top:1px solid var(--border);text-align:center;position:relative;z-index:2">
+  <div class="container">
+    <div class="logo" style="font-size:.9rem;">CELESTIAL ✦ SYNDICATE</div>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:16px;">© <span class="year"></span> Celestial Syndicate</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const ctx=Celestial.createScene();
+  if(!ctx)return;
+  const {scene}=ctx;
+  const stars=Celestial.starField(scene,{count:3500,spread:400,size:.6,colors:[new THREE.Color(0xa78bfa),new THREE.Color(0x22d3ee),new THREE.Color(0xfcd34d),new THREE.Color(0xffffff)]});
+  Celestial.glowSphere(scene,'#a78bfa',60,[0,0,-50]);
+  Celestial.glowSphere(scene,'#22d3ee',40,[-100,60,-80]);
+  Celestial.glowSphere(scene,'#fcd34d',35,[100,-50,-80]);
+  ctx.loop((t,m)=>{
+    stars.rotation.y=t*.03;stars.rotation.x=m.y*.15;
+    ctx.camera.position.x=m.x*18;ctx.camera.position.y=m.y*12;
+    ctx.camera.lookAt(0,0,-30);
+  });
+})();
+
+const FILES=['celestial.json','asuka.json','zm.json','toman.json'];
+let allPlayers=[],currentFilter='all';
+const gangClass={'Celestial Syndicate':'celestial','ASUKA':'asuka','ZM':'zm','TOMAN':'toman'};
+
+Promise.all(FILES.map(f=>fetch(f).then(r=>r.json()).then(d=>({gang:d.gang,members:(d.members||[]).map(m=>({...m,gang:d.gang}))})).catch(()=>null)))
+  .then(results=>{results.forEach(r=>{if(r)allPlayers.push(...r.members)});render()})
+  .catch(err=>{document.getElementById('board').innerHTML=`<tr><td colspan="5" class="empty-state">Failed: ${err.message}</td></tr>`});
+
+function render(){
+  const filtered=currentFilter==='all'?[...allPlayers]:allPlayers.filter(p=>p.gang===currentFilter);
+  filtered.sort((a,b)=>(b.points||0)-(a.points||0));
+  const top3=filtered.slice(0,3);
+  const medals=['🥇','🥈','🥉'],classes=['gold','silver','bronze'],labels=['1st Place','2nd Place','3rd Place'];
+  document.getElementById('podium').innerHTML=top3.length?top3.map((p,i)=>`<div class="p-card ${classes[i]}"><div class="p-rank-tag">${labels[i]}</div><div class="p-medal">${medals[i]}</div><div class="p-name">${Celestial.escapeHtml(p.name)}</div><div class="p-gang">${p.gang}</div><div class="p-pts">${(p.points||0).toLocaleString()}</div></div>`).join(''):'';
+  const board=document.getElementById('board');
+  if(!filtered.length){board.innerHTML='<tr><td colspan="5" class="empty-state">No players yet.</td></tr>';return}
+  board.innerHTML=filtered.map((p,i)=>`<tr><td class="rank-cell">#${i+1}</td><td class="name-cell">${Celestial.escapeHtml(p.name)}</td><td><span class="gang-tag ${gangClass[p.gang]||'celestial'}">${p.gang}</span></td><td class="kd-cell">${p.kd||'—'}</td><td class="pts-cell">${(p.points||0).toLocaleString()}</td></tr>`).join('');
+}
+
+document.getElementById('filters').addEventListener('click',e=>{
+  const btn=e.target.closest('button');if(!btn)return;
+  document.querySelectorAll('#filters button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');currentFilter=btn.dataset.gang;render();
+});
+</script>
+</body>
+</html>

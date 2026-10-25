@@ -1,0 +1,13 @@
+{
+  "gang": "ASUKA",
+  "created": "2021-02-14",
+  "members": [
+    { "name": "Ryo \"Redline\" K.", "rank": "Commander", "tier": "lead", "points": 95300, "kd": "4.18" },
+    { "name": "Mika V.", "rank": "Vice-Commander", "tier": "high", "points": 87600, "kd": "3.54" },
+    { "name": "Kaito S.", "rank": "Captain", "tier": "high", "points": 82400, "kd": "3.11" },
+    { "name": "Aya N.", "rank": "Pilot", "tier": "", "points": 78300, "kd": "2.81" },
+    { "name": "Daisuke R.", "rank": "Pilot", "tier": "", "points": 69800, "kd": "2.42" },
+    { "name": "Yuki H.", "rank": "Cadet", "tier": "", "points": 54200, "kd": "1.81" },
+    { "name": "Ren T.", "rank": "Cadet", "tier": "", "points": 47500, "kd": "1.54" }
+  ]
+}

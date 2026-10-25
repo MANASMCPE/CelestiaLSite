@@ -1,0 +1,14 @@
+{
+  "gang": "TOMAN",
+  "created": "2019-11-03",
+  "members": [
+    { "name": "Ryusei T.", "rank": "President", "tier": "lead", "points": 97200, "kd": "4.51" },
+    { "name": "Kenta M.", "rank": "Vice-President", "tier": "high", "points": 90500, "kd": "3.88" },
+    { "name": "Daigo S.", "rank": "1st Div Captain", "tier": "high", "points": 85700, "kd": "3.41" },
+    { "name": "Haru N.", "rank": "2nd Div Captain", "tier": "high", "points": 81200, "kd": "3.02" },
+    { "name": "Sota K.", "rank": "Vice-Captain", "tier": "", "points": 74600, "kd": "2.68" },
+    { "name": "Yuto A.", "rank": "Member", "tier": "", "points": 64200, "kd": "2.18" },
+    { "name": "Riku F.", "rank": "Member", "tier": "", "points": 58400, "kd": "1.94" },
+    { "name": "Takumi E.", "rank": "Member", "tier": "", "points": 51300, "kd": "1.72" }
+  ]
+}

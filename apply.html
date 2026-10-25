@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="celestial">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apply — Celestial Syndicate</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.form-hero{padding:160px 0 60px;text-align:center;position:relative;z-index:2}
+.form-hero h1{font-family:var(--font-display);font-size:clamp(2rem,6vw,3.4rem);font-weight:900;letter-spacing:.04em;background:linear-gradient(120deg,#fff,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.form-hero p{color:var(--muted);margin-top:20px;max-width:560px;margin-inline:auto}
+.form-wrap{max-width:760px;margin:0 auto 100px;position:relative;z-index:2}
+.form-card{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:24px;padding:48px 42px;backdrop-filter:blur(20px)}
+.field{margin-bottom:24px}
+.field label{display:block;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:10px}
+.field input,.field select,.field textarea{width:100%;padding:15px 18px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:var(--font-body);font-size:1rem;font-weight:500;outline:none;transition:border-color .25s,box-shadow .25s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.15)}
+.field textarea{resize:vertical;min-height:130px}
+.field select option{background:#0a0c1a;color:var(--text)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.check{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:12px;margin-bottom:30px}
+.check input{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;margin-top:2px;flex-shrink:0}
+.check label{font-size:.94rem;color:var(--muted);cursor:pointer;letter-spacing:0;text-transform:none;margin:0}
+.submit-btn{width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-family:var(--font-body);font-size:1rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 20px 50px -16px var(--accent)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.success{display:none;text-align:center;padding:70px 40px;background:linear-gradient(160deg,rgba(52,211,153,.1),rgba(34,211,238,.04));border:1px solid rgba(52,211,153,.3);border-radius:24px}
+.success.show{display:block;animation:fadeUp .6s ease}
+.success .icon{font-size:4rem;margin-bottom:24px}
+.success h2{font-family:var(--font-display);font-size:1.8rem;color:#fff;margin-bottom:16px;letter-spacing:.04em}
+.success p{color:var(--muted);max-width:440px;margin:0 auto 32px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@media(max-width:640px){.row{grid-template-columns:1fr}.form-card{padding:32px 24px}}
+</style>
+</head>
+<body>
+
+<div id="preloader"><div class="preloader-logo">APPLY</div><div class="preloader-bar"></div></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">CELESTIAL ✦ SYNDICATE</a>
+    <div class="nav-links">
+      <a href="index.html">Hub</a>
+      <a href="asuka.html">ASUKA</a>
+      <a href="zm.html">ZM</a>
+      <a href="toman.html">TOMAN</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="apply.html" class="active">Apply</a>
+    </div>
+  </div>
+</nav>
+
+<section class="form-hero">
+  <div class="container">
+    <h1>JOIN THE SYNDICATE</h1>
+    <p>Fill this out honestly. We review every application manually — impressing us matters more than numbers.</p>
+  </div>
+</section>
+
+<div class="form-wrap">
+  <form class="form-card" id="applyForm">
+    <div class="row">
+      <div class="field"><label>In-Game Name *</label><input type="text" name="ign" required placeholder="Your in-game handle" maxlength="30"></div>
+      <div class="field"><label>Discord Username *</label><input type="text" name="discord" required placeholder="username#0000" maxlength="40"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Preferred Gang *</label>
+        <select name="gang" required>
+          <option value="">— Select —</option>
+          <option value="Celestial Syndicate">Celestial Syndicate</option>
+          <option value="ASUKA">ASUKA</option>
+          <option value="ZM">ZM</option>
+          <option value="TOMAN">TOMAN</option>
+        </select>
+      </div>
+      <div class="field"><label>Applying For *</label>
+        <select name="rank" required>
+          <option value="">— Select —</option>
+          <option value="Member">Member (Entry)</option>
+          <option value="Elite">Elite</option>
+          <option value="Captain">Captain / Sentinel</option>
+          <option value="Leader">Leadership</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Experience Level *</label>
+      <select name="experience" required>
+        <option value="">— Select —</option>
+        <option value="New (under 3 months)">New — under 3 months</option>
+        <option value="Intermediate (3-12 months)">Intermediate — 3 to 12 months</option>
+        <option value="Veteran (1+ years)">Veteran — 1+ years</option>
+        <option value="Elite (3+ years)">Elite — 3+ years</option>
+      </select>
+    </div>
+    <div class="field"><label>Why should we pick you? *</label><textarea name="reason" required placeholder="Tell us about yourself, your strengths, and what you bring to the Syndicate." maxlength="600"></textarea></div>
+    <div class="check"><input type="checkbox" id="agree" required><label for="agree">I have read the Syndicate rules and agree to follow them without exception.</label></div>
+    <button type="submit" class="submit-btn" id="submitBtn">Submit Application</button>
+  </form>
+  <div class="success" id="successBox">
+    <div class="icon">✦</div>
+    <h2>APPLICATION RECEIVED</h2>
+    <p>Your request has been logged. Our recruiters will review it and reach out on Discord if you're a fit.</p>
+    <a href="index.html" class="btn btn-ghost">← Back to Hub</a>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script>
+(function(){
+  const ctx=Celestial.createScene();
+  if(!ctx)return;
+  const stars=Celestial.starField(ctx.scene,{count:3000,spread:380,size:.6,colors:[new THREE.Color(0xa78bfa),new THREE.Color(0x22d3ee),new THREE.Color(0xffffff)]});
+  Celestial.glowSphere(ctx.scene,'#a78bfa',55,[0,0,-50]);
+  Celestial.glowSphere(ctx.scene,'#22d3ee',35,[-100,60,-80]);
+  ctx.loop((t,m)=>{stars.rotation.y=t*.02;stars.rotation.x=m.y*.1;ctx.camera.position.x=m.x*15;ctx.camera.position.y=m.y*10;ctx.camera.lookAt(0,0,-30)});
+})();
+
+const KEY='celestial_applications';
+document.getElementById('applyForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting…';
+  const fd=new FormData(this);
+  const app={id:Date.now()+'_'+Math.random().toString(36).slice(2,8),ign:fd.get('ign').trim(),discord:fd.get('discord').trim(),gang:fd.get('gang'),rank:fd.get('rank'),experience:fd.get('experience'),reason:fd.get('reason').trim(),status:'pending',date:new Date().toISOString()};
+  const list=JSON.parse(localStorage.getItem(KEY)||'[]');list.push(app);localStorage.setItem(KEY,JSON.stringify(list));
+  setTimeout(()=>{document.getElementById('applyForm').style.display='none';document.getElementById('successBox').classList.add('show')},900);
+});
+</script>
+</body>
+</html>
