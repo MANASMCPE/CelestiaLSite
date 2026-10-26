@@ -228,9 +228,37 @@ window.Celestial = (function(){
   return {escapeHtml,glowTexture,createScene,starField,glowSphere,crystal,rings,createBlackHole};
 })();
 
+/* ===== Global UI ===== */
 (function(){
   addEventListener('load',()=>{const p=document.getElementById('preloader');if(p)setTimeout(()=>p.classList.add('done'),700)});
 
+  /* Scroll progress bar */
+  const progressBar=document.createElement('div');
+  progressBar.className='scroll-progress';
+  document.body.appendChild(progressBar);
+
+  /* Scroll to top */
+  const scrollTopBtn=document.createElement('button');
+  scrollTopBtn.className='scroll-top';
+  scrollTopBtn.innerHTML='↑';
+  scrollTopBtn.setAttribute('aria-label','Scroll to top');
+  scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  document.body.appendChild(scrollTopBtn);
+
+  function updateScrollUI(){
+    const scrollTop=scrollY;
+    const docHeight=document.documentElement.scrollHeight-innerHeight;
+    const pct=docHeight>0?(scrollTop/docHeight)*100:0;
+    progressBar.style.width=pct+'%';
+    scrollTopBtn.classList.toggle('show',scrollTop>500);
+
+    const nav=document.querySelector('.nav');
+    if(nav)nav.classList.toggle('scrolled',scrollTop>40);
+  }
+  addEventListener('scroll',updateScrollUI,{passive:true});
+  updateScrollUI();
+
+  /* Custom cursor */
   if(!matchMedia('(pointer:coarse)').matches){
     const cur=document.createElement('div');cur.className='cursor';document.body.appendChild(cur);
     let mx=0,my=0,cx=0,cy=0;
@@ -239,11 +267,25 @@ window.Celestial = (function(){
     document.addEventListener('mouseover',e=>{cur.classList.toggle('hover',!!e.target.closest('a,button,.hoverable'))});
   }
 
-  addEventListener('scroll',()=>{const n=document.querySelector('.nav');if(n)n.classList.toggle('scrolled',scrollY>40)});
+  /* Hamburger toggle */
+  const navToggle=document.querySelector('.nav-toggle');
+  const navLinks=document.querySelector('.nav-links');
+  if(navToggle && navLinks){
+    navToggle.addEventListener('click',()=>{
+      navToggle.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+      navToggle.classList.remove('open');
+      navLinks.classList.remove('open');
+    }));
+  }
 
+  /* Reveal on scroll */
   const io=new IntersectionObserver(es=>es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),(i%6)*80);io.unobserve(e.target)}}),{threshold:.1});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
+  /* Tilt */
   document.querySelectorAll('[data-tilt]').forEach(el=>{
     el.addEventListener('mousemove',e=>{
       const r=el.getBoundingClientRect();
@@ -254,6 +296,7 @@ window.Celestial = (function(){
     el.addEventListener('mouseleave',()=>{el.style.transform=''});
   });
 
+  /* Magnetic */
   document.querySelectorAll('[data-magnetic]').forEach(el=>{
     el.addEventListener('mousemove',e=>{
       const r=el.getBoundingClientRect();
@@ -264,6 +307,7 @@ window.Celestial = (function(){
 
   document.querySelectorAll('.year').forEach(el=>el.textContent=new Date().getFullYear());
 
+  /* Counters */
   const cio=new IntersectionObserver(es=>es.forEach(e=>{
     if(!e.isIntersecting)return;
     const target=+e.target.dataset.count;
@@ -276,4 +320,19 @@ window.Celestial = (function(){
     cio.unobserve(e.target);
   }),{threshold:.5});
   document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+  /* Page fade out on internal navigation */
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href]');
+    if(!a)return;
+    const href=a.getAttribute('href');
+    if(!href||href.startsWith('#')||href.startsWith('http')||href.startsWith('mailto:')||href.startsWith('tel:')||a.target==='_blank'||a.hasAttribute('download'))return;
+    e.preventDefault();
+    document.body.style.transition='opacity .25s ease';
+    document.body.style.opacity='0';
+    setTimeout(()=>{window.location.href=href},260);
+  });
+
+  /* Re-show body on back navigation */
+  addEventListener('pageshow',e=>{if(e.persisted){document.body.style.opacity='1';document.body.style.transition=''}});
 })();
