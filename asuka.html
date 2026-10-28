@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ASUKA | Celestial Syndicate</title>
+<meta name="description" content="ASUKA, the strike force of the Celestial Syndicate alliance.">
+<meta name="theme-color" content="#0a0305">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🩸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+
+  /* ASUKA: tactical red HUD. Chamfered corners, scanlines, Russo One headings over Chakra Petch body. */
+  :root { --bg:#0a0305; --fg:#ffeef0; --mute:#c99aa2; --a1:#ff2b3a; --a2:#ff8a2b; --a3:#ffb347; --on-a:#0a0305; --card:rgba(26,6,10,.74); --line:rgba(255,60,75,.3); --nav-bg:rgba(10,3,5,.82); --r:0; --bw:1px; --f-display:"Russo One","Arial Black",sans-serif; --f-body:"Chakra Petch","Segoe UI",sans-serif; --f-mono:"Chakra Petch",ui-monospace,monospace; --veil: radial-gradient(ellipse at 50% 38%, transparent 0 22%, rgba(10,3,5,.5) 60%, rgba(10,3,5,.92) 100%); }
+  body::after { content:""; position:fixed; inset:0; z-index:3; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(255,40,60,.045) 0 1px, transparent 1px 3px); mix-blend-mode:screen; }
+  .hud { position:fixed; inset:76px 18px 18px; z-index:4; pointer-events:none; }
+  .hud i { position:absolute; width:34px; height:34px; border:2px solid var(--a1); opacity:.8; }
+  .hud i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0} .hud i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+  .hud i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0} .hud i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+  .gh { align-items:flex-start; }
+  .gtitle { font-weight:400; text-transform:uppercase; letter-spacing:.02em; text-shadow: 3px 0 0 rgba(255,43,58,.7), -3px 0 0 rgba(255,138,43,.45), 0 0 50px rgba(255,43,58,.5); animation: glitch 5s steps(1) infinite; }
+  @keyframes glitch { 0%,92%,100%{transform:none;text-shadow:3px 0 0 rgba(255,43,58,.7),-3px 0 0 rgba(255,138,43,.45),0 0 50px rgba(255,43,58,.5)} 93%{transform:translate(-4px,1px);text-shadow:-6px 0 0 rgba(255,43,58,.9),6px 0 0 rgba(0,220,255,.5)} 95%{transform:translate(5px,-1px)} 97%{transform:translate(-2px,0)} }
+  .gkick::before { content:""; width:38px; height:2px; background:var(--a1); }
+  .gkick, .links a, .badge, .chip, .btn, th, .sec-line span, .field label { font-weight:600; }
+  .btn, .chip, .mem, .pillar, .stat, .ally { clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px)); }
+  .btn { background: linear-gradient(135deg, var(--a1), #c4101e); color:#fff; border-color:var(--a1); }
+  .btn:hover { box-shadow:none; filter:brightness(1.2); transform:translateX(3px); }
+  .btn.alt { background:transparent; color:var(--fg); border-color:var(--line); }
+  .mem { border-left:3px solid var(--a1); }
+  .mem:hover { background:rgba(255,43,58,.1); }
+  .badge { border-radius:0; text-transform:uppercase; }
+  .badge.lead { background:var(--a1); color:#fff; }
+  .sec-line h2, .pillar h3, .brand { text-transform:uppercase; }
+  .pillar { border-top:3px solid var(--a1); }
+  .links a:hover, .links a.on { border-color:var(--a1); }
+
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
+  .pillar { padding: 28px 26px; background: var(--card); border: var(--bw) solid var(--line); border-radius: var(--r); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .pillar .pk { font-family: var(--f-mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--a1); }
+  .pillar h3 { font-family: var(--f-display); font-weight: 400; font-size: 1.4rem; margin: 10px 0 8px; letter-spacing: .04em; }
+  .pillar p { color: var(--mute); }
+
+</style>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('cs_boot'))document.documentElement.classList.add('no-boot')}catch(e){}</script>
+</head>
+<body data-gang="asuka">
+<div class="veil"></div>
+<div class="hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<main>
+  <header class="gh wrap">
+    <div class="gkick">Unit 02 &middot; Operational</div>
+    <h1 class="gtitle">ASUKA</h1>
+    <p class="gtag">Swift, sharp, relentless. The blade in the dark, engineered for precision, built for war.</p>
+    <div class="chips">
+      <span class="chip">Founded <strong id="founded">14 Feb 2021</strong></span>
+      <span class="chip">Members <strong id="mcount">0 Elite</strong></span>
+      <span class="chip">Role <strong>Strike Force</strong></span>
+    </div>
+    <div class="cta" style="justify-content:flex-start;margin-top:34px"><a class="btn" href="apply.html?gang=asuka">Apply to ASUKA</a><button class="btn alt" type="button" data-scroll="roster">See the Roster</button></div>
+  </header>
+
+  <div class="wrap">
+    <section id="roster">
+      <div class="sec-line rv"><h2>Pilot Roster</h2><span id="rcount">0 Members</span></div>
+      <div class="roster" id="rgrid"><div class="msg">Loading roster...</div></div>
+    </section>
+
+    <section id="creed">
+      <div class="sec-line rv"><h2>Combat Directives</h2><span>Standing orders</span></div>
+      <div class="pillars">
+        <article class="pillar rv" data-tilt><span class="pk">Directive 01</span><h3>Precision</h3><p>Every strike is planned, measured and landed on the first attempt. No wasted movement.</p></article>
+        <article class="pillar rv" data-tilt><span class="pk">Directive 02</span><h3>Speed</h3><p>Hit before the enemy reads the board. The first ten seconds decide the war.</p></article>
+        <article class="pillar rv" data-tilt><span class="pk">Directive 03</span><h3>Discipline</h3><p>Orders are followed, comms stay clean, and nobody breaks formation.</p></article>
+      </div>
+    </section>
+
+    <section id="allies">
+      <div class="sec-line rv"><h2>The Alliance</h2><span>Stronger together</span></div>
+      <div class="chips" style="margin-top:0">
+        <a class="chip" href="index.html" style="text-decoration:none"><strong>Celestial Syndicate</strong></a>
+        <a class="chip" href="zm.html" style="text-decoration:none"><strong>ZM</strong></a>
+        <a class="chip" href="toman.html" style="text-decoration:none"><strong>TOMAN</strong></a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({
+  active: 'asuka',
+  boot: { title: 'ASUKA // UNIT-02', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#ff2b3a" stroke-width="2"><polygon points="70,8 124,39 124,101 70,132 16,101 16,39"><animateTransform attributeName="transform" type="rotate" from="0 70 70" to="360 70 70" dur="6s" repeatCount="indefinite"/></polygon><polygon points="70,34 104,92 36,92" stroke="#ff8a2b"><animateTransform attributeName="transform" type="rotate" from="360 70 70" to="0 70 70" dur="3s" repeatCount="indefinite"/></polygon></g><circle cx="70" cy="70" r="7" fill="#ff2b3a"><animate attributeName="r" values="5;10;5" dur="1.2s" repeatCount="indefinite"/></circle></svg>', msgs: [[0,"Booting unit 02"],[28,"Calibrating blades"],[58,"Syncing pilots"],[88,"Weapons hot"]] }
+});
+CS.scene(CS.scenes.asuka);
+CS.load(['asuka']).then(function (d) {
+  var g = d.asuka, n = (g.members || []).length;
+  document.getElementById('founded').textContent = CS.fmtDate(g.created);
+  document.getElementById('mcount').textContent = n + ' Elite';
+  document.getElementById('rcount').textContent = n + (n === 1 ? ' Member' : ' Members');
+  CS.roster(document.getElementById('rgrid'), g.members, 'Roster is being assembled', 'Unit 02 pilots will be listed here soon.', 'asuka');
+}).catch(function (e) { document.getElementById('rgrid').innerHTML = '<div class="msg err">Could not load roster: ' + CS.esc(e.message) + '</div>'; });
+</script>
+</body>
+</html>

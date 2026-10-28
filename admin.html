@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin | Celestial Syndicate</title>
+<meta name="description" content="Application review panel.">
+<meta name="theme-color" content="#04050d">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+
+<main class="wrap">
+  <section style="padding-top:20px" id="root"></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'admin' });
+CS.scene(CS.scenes.stars);
+var TOKEN = ''; try { TOKEN = sessionStorage.getItem('cs_admin') || ''; } catch (e) { }
+var APPS = [], FILTER = 'all', CONFIRM = null, BANNER = '', root = document.getElementById('root');
+function api(body) {
+  return fetch('/api/admin', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (r.status === 401 && body.action !== 'login') { logout(); } if (!r.ok) { var e = new Error(j.error || 'Request failed'); e.status = r.status; throw e; } return j; }); });
+}
+function logout() { TOKEN = ''; try { sessionStorage.removeItem('cs_admin'); } catch (e) { } showLogin(); }
+function showLogin(msg) {
+  root.innerHTML = '<div class="lock rise"><h1>Admin Access</h1><p>Authorized personnel only</p><form id="lf"><input type="password" id="pw" placeholder="Enter admin password" autocomplete="current-password" required><button class="btn" type="submit" style="width:100%">Unlock</button></form><div class="ferr" id="lerr" style="margin:14px 0 0">' + CS.esc(msg || '') + '</div></div>';
+  document.getElementById('lf').addEventListener('submit', function (e) {
+    e.preventDefault(); var pw = document.getElementById('pw').value, b = e.target.querySelector('button'); b.disabled = true;
+    api({ action: 'login', password: pw }).then(function (j) { TOKEN = j.token; try { sessionStorage.setItem('cs_admin', TOKEN); } catch (x) { } load(); })
+      .catch(function (ex) { document.getElementById('lerr').textContent = ex.message; b.disabled = false; });
+  });
+  var p = document.getElementById('pw'); if (p) p.focus();
+}
+function load() {
+  root.innerHTML = '<div class="msg">Loading applications...</div>';
+  api({ action: 'list' }).then(function (j) { APPS = j.apps || []; BANNER = ''; render(); })
+    .catch(function (ex) { if (!TOKEN) return; BANNER = ex.message; APPS = []; render(); });
+}
+function render() {
+  var c = { total: APPS.length, pending: 0, accepted: 0, rejected: 0 };
+  APPS.forEach(function (a) { if (c[a.status] != null) c[a.status]++; });
+  var shown = FILTER === 'all' ? APPS : APPS.filter(function (a) { return a.status === FILTER; });
+  var pills = ['all', 'pending', 'accepted', 'rejected'].map(function (f) { return '<button type="button" class="pill' + (FILTER === f ? ' on' : '') + '" data-f="' + f + '">' + f + '</button>'; }).join('');
+  var clear = CONFIRM === 'ALL' ? '<span style="font-family:var(--f-mono);font-size:12px">Delete ALL?</span><button class="btn sm no" data-a="clear-yes" type="button">Yes, delete</button><button class="btn sm alt" data-a="cancel" type="button">No</button>' : '<button class="btn sm alt no" data-a="clear" type="button">Clear All</button>';
+  var cards = shown.length ? shown.map(function (a) {
+    var del = CONFIRM === a.id ? '<button class="btn sm no" data-a="del-yes" data-id="' + CS.esc(a.id) + '" type="button">Yes, delete</button><button class="btn sm alt" data-a="cancel" type="button">Keep</button>' : '<button class="btn sm alt no" data-a="del" data-id="' + CS.esc(a.id) + '" type="button">Delete</button>';
+    return '<div class="app"><div class="top"><div><div class="who">' + CS.esc(a.ign) + '</div><div class="disc">' + CS.esc(a.discord) + '</div></div><span class="st ' + CS.esc(a.status) + '">' + CS.esc(a.status) + '</span></div><div class="meta"><span>Gang: <b>' + CS.esc(a.gang) + '</b></span><span>Rank: <b>' + CS.esc(a.rank) + '</b></span><span>Exp: <b>' + CS.esc(a.experience) + '</b></span><span>' + CS.esc(new Date(a.date).toLocaleString()) + '</span></div><div class="why">' + CS.esc(a.reason) + '</div><div class="acts"><button class="btn sm alt ok" data-a="accepted" data-id="' + CS.esc(a.id) + '" type="button">Accept</button><button class="btn sm alt no" data-a="rejected" data-id="' + CS.esc(a.id) + '" type="button">Reject</button>' + del + '</div></div>';
+  }).join('') : '<div class="empty"><b>No applications</b>' + (FILTER === 'all' ? 'Once people apply, they appear here.' : 'Try a different filter.') + '</div>';
+  root.innerHTML = '<div class="dh"><h1>&#10022; Admin Dashboard</h1><div class="acts"><button class="btn sm alt" data-a="refresh" type="button">Refresh</button><button class="btn sm alt" data-a="export" type="button">Export</button>' + clear + '<button class="btn sm alt" data-a="logout" type="button">Lock</button></div></div>' +
+    (BANNER ? '<p class="ferr">' + CS.esc(BANNER) + '</p>' : '') +
+    '<div class="asts"><div class="ast"><div class="v">' + c.total + '</div><div class="k">Total</div></div><div class="ast"><div class="v">' + c.pending + '</div><div class="k">Pending</div></div><div class="ast"><div class="v">' + c.accepted + '</div><div class="k">Accepted</div></div><div class="ast"><div class="v">' + c.rejected + '</div><div class="k">Rejected</div></div></div>' +
+    '<div class="pills" style="justify-content:flex-start" id="fp">' + pills + '</div><div class="apps">' + cards + '</div>';
+}
+root.addEventListener('click', function (e) {
+  var f = e.target.closest('[data-f]'); if (f) { FILTER = f.dataset.f; render(); return; }
+  var b = e.target.closest('[data-a]'); if (!b) return;
+  var a = b.dataset.a, id = b.dataset.id;
+  function run(body) { api(body).then(load).catch(function (ex) { BANNER = ex.message; render(); }); }
+  if (a === 'accepted' || a === 'rejected') run({ action: 'status', id: id, status: a });
+  else if (a === 'del') { CONFIRM = id; render(); }
+  else if (a === 'del-yes') { CONFIRM = null; run({ action: 'delete', id: id }); }
+  else if (a === 'clear') { CONFIRM = 'ALL'; render(); }
+  else if (a === 'clear-yes') { CONFIRM = null; run({ action: 'clear' }); }
+  else if (a === 'cancel') { CONFIRM = null; render(); }
+  else if (a === 'refresh') load();
+  else if (a === 'logout') logout();
+  else if (a === 'export') {
+    var blob = new Blob([JSON.stringify(APPS, null, 2)], { type: 'application/json' }), l = document.createElement('a');
+    l.href = URL.createObjectURL(blob); l.download = 'applications_' + new Date().toISOString().slice(0, 10) + '.json'; l.click(); setTimeout(function () { URL.revokeObjectURL(l.href); }, 1000);
+  }
+});
+if (TOKEN) load(); else showLogin();
+</script>
+</body>
+</html>

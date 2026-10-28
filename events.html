@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Wars & Events | Celestial Syndicate</title>
+<meta name="description" content="Upcoming wars, events and results of the Celestial alliance.">
+<meta name="theme-color" content="#04050d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <section style="padding-top:20px">
+    <div class="sh rv"><div class="kick">War room</div><h2>Wars &amp; Events</h2></div>
+    <div id="next"></div>
+    <div class="tabs" id="tabs"><button type="button" class="tab on" data-t="up">Upcoming</button><button type="button" class="tab" data-t="past">Results</button></div>
+    <div class="evs" id="list"><div class="msg">Loading events...</div></div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'events', boot: { title: 'Wars &amp; Events', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#ff5fa8" stroke-width="2"><path d="M30 110 L100 40 M110 110 L40 40"/><circle cx="70" cy="75" r="46" stroke="#7fd6ff"><animate attributeName="r" values="40;50;40" dur="1.6s" repeatCount="indefinite"/></circle></g></svg>', msgs: [[0, 'Scouting enemies'], [40, 'Reading the calendar'], [80, 'Sharpening blades']], dur: 1800 } });
+CS.scene(CS.scenes.stars);
+var TY = { war: 'War', event: 'Event', meet: 'Meet' }, EV = [], tab = 'up';
+function gname(k) { return CS.GANGS[k] ? CS.GANGS[k].short : k; }
+function ts(e) { var t = new Date(e.date).getTime(); return isNaN(t) ? 0 : t; }
+function isPast(e) { return !!e.result || (ts(e) && ts(e) + 4 * 3600e3 < Date.now()); }
+function card(e) {
+  var d = new Date(e.date), ok = !isNaN(d), past = isPast(e), live = !past && ok && ts(e) <= Date.now();
+  var vs = e.vs ? e.vs : (e.gangs || []).map(gname).join(' vs ');
+  var tp = TY[e.type] ? e.type : 'event';
+  return '<article class="ev rv' + (past ? ' done' : '') + '"><div class="dt"><b>' + (ok ? d.getDate() : '—') + '</b><span>' + (ok ? CS.fmtDate(d.toISOString().slice(0, 10)).split(' ')[1] : '') + '</span></div><div><h3>' + CS.esc(e.title) + '</h3>' + (vs ? '<div class="vs">' + CS.esc(vs) + '</div>' : '') + (e.desc ? '<p>' + CS.esc(e.desc) + '</p>' : '') + (e.result ? '<div class="res">&#10003; ' + CS.esc(e.result) + '</div>' : '') + '</div><div class="side"><span class="tp ' + (live ? 'live' : tp) + '">' + (live ? 'Live now' : TY[tp]) + '</span>' + (ok && !past ? '<span class="tp">' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</span>' : '') + '</div></article>';
+}
+function render() {
+  var up = EV.filter(function (e) { return !isPast(e); }).sort(function (a, b) { return ts(a) - ts(b); });
+  var pa = EV.filter(isPast).sort(function (a, b) { return ts(b) - ts(a); });
+  var nx = up.filter(function (e) { return ts(e) > Date.now(); })[0], el = document.getElementById('next');
+  if (nx && tab === 'up') {
+    el.innerHTML = '<div class="next rv"><div class="nk">Next up &middot; ' + (TY[nx.type] || 'Event') + '</div><h2>' + CS.esc(nx.title) + '</h2><div class="nv">' + CS.esc(nx.vs || (nx.gangs || []).map(gname).join(' vs ')) + '</div><div class="cd" id="cd"></div></div>';
+    CS.countdown(document.getElementById('cd'), nx.date, function () { render(); });
+  } else el.innerHTML = '';
+  var list = tab === 'up' ? up : pa, box = document.getElementById('list');
+  box.innerHTML = list.length ? list.map(card).join('') : '<div class="empty"><b>' + (tab === 'up' ? 'Koi upcoming event nahi' : 'Abhi koi result nahi') + '</b>events.json mein events add karo, wo yahan dikhenge.</div>';
+  CS.reveal();
+}
+CS.json('events.json').then(function (d) { EV = d.events || []; render(); }).catch(function (e) { document.getElementById('list').innerHTML = '<div class="msg err">Could not load events: ' + CS.esc(e.message) + '</div>'; });
+document.getElementById('tabs').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return; tab = b.dataset.t;
+  CS.$$('#tabs .tab').forEach(function (p) { p.classList.toggle('on', p === b); }); render();
+});
+</script>
+</body>
+</html>

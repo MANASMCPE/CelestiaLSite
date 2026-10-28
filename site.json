@@ -1,0 +1,40 @@
+{
+  "discord": { "invite": "", "serverId": "" },
+  "charter": [
+    { "t": "Ek parivaar", "d": "Celestial, ASUKA, ZM aur TOMAN ek alliance hain. Alliance ke kisi bhi member par hamla, sab par hamla." },
+    { "t": "Pehle baat, phir war", "d": "Alliance ke andar jhagda ho to leaders baat karke suljhate hain. Koi apni marzi se war shuru nahi karta." },
+    { "t": "Ek doosre ki izzat", "d": "Alliance gangs ke naam, tag aur leaders ki public mein izzat karo." }
+  ],
+  "ranks": [
+    { "n": "Leader", "d": "Gang ka chehra. Final decisions, wars aur alliance meetings." },
+    { "n": "Co-Leader", "d": "Leader ke saath chalte hain, roster aur events sambhalte hain." },
+    { "n": "Elite", "d": "Top performers. Wars mein frontline." },
+    { "n": "Veteran", "d": "Purane aur bharosemand members." },
+    { "n": "Member", "d": "Gang ke pakke members." },
+    { "n": "Recruit", "d": "Naye log. Trial period mein." }
+  ],
+  "rules": {
+    "celestial": [
+      { "t": "Respect first", "d": "Gang ke andar ya bahar kisi ko gaali ya insult nahi." },
+      { "t": "Active raho", "d": "7 din se zyada bina batae gayab raho to rank ghat sakta hai." },
+      { "t": "Tag wear karo", "d": "Server par gang tag lagake hi khelo." },
+      { "t": "No leaks", "d": "Gang ki planning aur chats bahar share nahi hoti." },
+      { "t": "Leaders ka faisla final", "d": "Disagree ho to DM mein baat karo, public mein nahi." }
+    ],
+    "asuka": [
+      { "t": "Follow the chain", "d": "War mein orders leader ke through hi aate hain." },
+      { "t": "No solo wars", "d": "Bina permission kisi gang se panga nahi." },
+      { "t": "Be ready", "d": "War time par online raho." }
+    ],
+    "zm": [
+      { "t": "Zero mercy, full respect", "d": "War mein dum dikhao, par apne logon ki izzat karo." },
+      { "t": "Team first", "d": "Individual stats se pehle team ki jeet." },
+      { "t": "No traitors", "d": "Alliance ke saath dhokha nahi." }
+    ],
+    "toman": [
+      { "t": "Honor", "d": "Toman ka naam izzat se liya jata hai. Kisi kamzor par haath nahi." },
+      { "t": "Loyalty", "d": "Dost ke liye khada rehna, chahe kuch bhi ho." },
+      { "t": "Discipline", "d": "Meeting aur war time par samay se aao." }
+    ]
+  }
+}

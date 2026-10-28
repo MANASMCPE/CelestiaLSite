@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gallery & Discord | Celestial Syndicate</title>
+<meta name="description" content="Screenshots, clips and the Celestial Discord.">
+<meta name="theme-color" content="#04050d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <section style="padding-top:20px">
+    <div class="sh rv"><div class="kick">Moments from the syndicate</div><h2>Gallery</h2></div>
+    <div class="gal" id="gal"><div class="msg">Loading gallery...</div></div>
+  </section>
+  <section>
+    <div class="dc rv">
+      <div><h2>Join the Discord</h2><p>War calls, events, recruitment &mdash; sab kuch Discord par hota hai. Aao aur parivaar ka hissa bano.</p><div id="dcl"></div></div>
+      <div class="dcw" id="dcw"></div>
+    </div>
+  </section>
+</main>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Media viewer"><button type="button" class="x" aria-label="Close">&#10005;</button><button type="button" class="pv" aria-label="Previous">&#8249;</button><button type="button" class="nx" aria-label="Next">&#8250;</button><div id="lbm"></div><div class="cap" id="lbc"></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'gallery', boot: { title: 'Gallery', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#a468ff" stroke-width="2"><rect x="22" y="34" width="96" height="72" rx="6"/><circle cx="52" cy="60" r="8" stroke="#7fd6ff"/><path d="M26 100l28-26 20 18 14-12 28 20" stroke="#ff5fa8"/></g></svg>', msgs: [[0, 'Developing photos'], [40, 'Hanging frames'], [80, 'Lighting up']], dur: 1800 } });
+CS.scene(CS.scenes.stars);
+var IT = [], cur = 0, lb = document.getElementById('lb');
+function isVid(u) { return /\.(mp4|webm|mov)(\?|$)/i.test(u); }
+function safe(u) { return /^(https?:)?\/\//i.test(u) || /^[\w./-]+$/.test(u) ? u : ''; }
+function show(i) {
+  cur = (i + IT.length) % IT.length; var x = IT[cur], u = safe(x.src || '');
+  document.getElementById('lbm').innerHTML = isVid(u) ? '<video src="' + CS.esc(u) + '" controls autoplay playsinline></video>' : '<img src="' + CS.esc(u) + '" alt="' + CS.esc(x.caption || 'Gallery image') + '">';
+  document.getElementById('lbc').textContent = x.caption || '';
+  lb.classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function close() { lb.classList.remove('open'); document.getElementById('lbm').innerHTML = ''; document.body.style.overflow = ''; }
+CS.json('gallery.json').then(function (d) {
+  IT = (d.items || []).filter(function (x) { return safe(x.src || ''); });
+  var g = document.getElementById('gal');
+  if (!IT.length) { g.style.columns = '1'; g.innerHTML = '<div class="empty"><b>Gallery abhi khaali hai</b>Images ya clips ko repo mein daalo aur gallery.json mein add karo.</div>'; return; }
+  g.innerHTML = IT.map(function (x, i) { var u = safe(x.src), th = safe(x.thumb || ''); return '<figure class="gi rv" data-i="' + i + '" tabindex="0">' + (isVid(u) && !th ? '<video src="' + CS.esc(u) + '#t=0.5" muted preload="metadata" playsinline></video>' : '<img loading="lazy" src="' + CS.esc(th || u) + '" alt="' + CS.esc(x.caption || 'Gallery image') + '">') + (x.caption ? '<figcaption>' + CS.esc(x.caption) + '</figcaption>' : '') + '</figure>'; }).join('');
+  CS.reveal();
+}).catch(function (e) { document.getElementById('gal').innerHTML = '<div class="msg err">Could not load gallery: ' + CS.esc(e.message) + '</div>'; });
+document.getElementById('gal').addEventListener('click', function (e) { var f = e.target.closest('.gi'); if (f) show(+f.dataset.i); });
+document.getElementById('gal').addEventListener('keydown', function (e) { var f = e.target.closest('.gi'); if (f && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); show(+f.dataset.i); } });
+lb.querySelector('.x').onclick = close; lb.querySelector('.pv').onclick = function () { show(cur - 1); }; lb.querySelector('.nx').onclick = function () { show(cur + 1); };
+lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+addEventListener('keydown', function (e) { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') show(cur - 1); if (e.key === 'ArrowRight') show(cur + 1); });
+CS.json('site.json').then(function (s) {
+  var dc = s.discord || {}, inv = /^https:\/\/(discord\.gg|discord\.com\/invite)\//i.test(dc.invite || '') ? dc.invite : '';
+  document.getElementById('dcl').innerHTML = inv ? '<a class="btn dcb" href="' + CS.esc(inv) + '" target="_blank" rel="noopener noreferrer">Join Discord</a>' : '<span class="btn" style="opacity:.6;cursor:default">Invite link jald aa raha hai</span>';
+  var w = document.getElementById('dcw');
+  if (!/^\d{15,22}$/.test(dc.serverId || '')) { w.innerHTML = '<div class="dcn">&#10022;<small>Community hub</small></div>'; return; }
+  fetch('https://discord.com/api/guilds/' + dc.serverId + '/widget.json').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (j) {
+    var m = (j.members || []).slice(0, 14);
+    w.innerHTML = '<div class="dcn">' + (j.presence_count || 0) + '<small>online now</small></div><div class="dcm">' + m.map(function (u) { return '<img src="' + CS.esc(u.avatar_url) + '" alt="' + CS.esc(u.username) + '" title="' + CS.esc(u.username) + '" loading="lazy">'; }).join('') + '</div>';
+  }).catch(function () { w.innerHTML = '<div class="dcn">&#10022;<small>Community hub</small></div>'; });
+}).catch(function () {});
+</script>
+</body>
+</html>

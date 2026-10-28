@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ZM | Celestial Syndicate</title>
+<meta name="description" content="ZM, the strategic core of the Celestial Syndicate alliance.">
+<meta name="theme-color" content="#12040f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🌸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+
+  /* ZM: bioluminescent orchid. Soft round forms, petal-shaped cards, Fraunces italics over Outfit. */
+  :root { --bg:#12040f; --fg:#ffeaf6; --mute:#d9a8c8; --a1:#ff4fa3; --a2:#c64bff; --a3:#ffc2e2; --on-a:#1a0314; --card:rgba(42,8,36,.56); --line:rgba(255,120,200,.26); --nav-bg:rgba(18,4,15,.72); --r:26px; --bw:1px; --f-display:"Fraunces",Georgia,serif; --f-body:"Outfit","Segoe UI",sans-serif; --f-mono:"Outfit",sans-serif; --veil: radial-gradient(ellipse at 50% 40%, transparent 0 20%, rgba(18,4,15,.5) 60%, rgba(18,4,15,.92) 100%); }
+  .blob { position:fixed; z-index:1; pointer-events:none; border-radius:50%; filter:blur(80px); opacity:.35; }
+  .b1 { width:46vw; height:46vw; left:-14vw; bottom:-10vw; background:#c64bff; animation:drift 18s ease-in-out infinite alternate; }
+  .b2 { width:38vw; height:38vw; right:-10vw; top:10vh; background:#ff4fa3; animation:drift 22s ease-in-out infinite alternate-reverse; }
+  @keyframes drift { to { transform: translate(6vw,-6vh) scale(1.15); } }
+  .gtitle { font-style:italic; font-weight:800; font-variation-settings:"SOFT" 100,"WONK" 1; letter-spacing:-.01em; background:linear-gradient(120deg,#fff 0%,#ffc2e2 35%,#ff4fa3 70%,#c64bff 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 40px rgba(255,79,163,.5)); }
+  .gh { align-items:flex-start; }
+  .gkick { font-style:italic; letter-spacing:.2em; }
+  .sec-line h2, .pillar h3 { font-style:italic; font-variation-settings:"SOFT" 100,"WONK" 1; font-weight:600; }
+  .btn { border-radius:999px; background:linear-gradient(135deg,var(--a1),var(--a2)); color:#fff; border-color:transparent; letter-spacing:.14em; }
+  .btn:hover { box-shadow:0 0 36px rgba(255,79,163,.6); transform:translateY(-2px); }
+  .btn.alt { background:transparent; color:var(--fg); border:1px solid var(--line); }
+  .mem, .pillar, .ally, .stat { border-radius:38px 6px 38px 6px; }
+  .mem:nth-child(even), .pillar:nth-child(even) { border-radius:6px 38px 6px 38px; }
+  .mem:hover { box-shadow:0 18px 50px -20px var(--a1); }
+  .chip { border-radius:999px; }
+  .badge { text-transform:none; letter-spacing:.06em; font-size:12px; }
+  .badge.lead { background:linear-gradient(135deg,var(--a1),var(--a2)); color:#fff; }
+  .links a { letter-spacing:.1em; }
+  .pillar { padding:32px 30px; }
+
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
+  .pillar { padding: 28px 26px; background: var(--card); border: var(--bw) solid var(--line); border-radius: var(--r); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .pillar .pk { font-family: var(--f-mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--a1); }
+  .pillar h3 { font-family: var(--f-display); font-weight: 400; font-size: 1.4rem; margin: 10px 0 8px; letter-spacing: .04em; }
+  .pillar p { color: var(--mute); }
+
+</style>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('cs_boot'))document.documentElement.classList.add('no-boot')}catch(e){}</script>
+</head>
+<body data-gang="zm">
+<div class="veil"></div>
+<div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div>
+<main>
+  <header class="gh wrap">
+    <div class="gkick">Zero Mutation &middot; Parasitic Bond</div>
+    <h1 class="gtitle">ZM</h1>
+    <p class="gtag">Born from the stars, bonded by fate. ZM moves as one mind: strategic, beautiful, and utterly lethal.</p>
+    <div class="chips">
+      <span class="chip">Founded <strong id="founded">22 Jul 2020</strong></span>
+      <span class="chip">Members <strong id="mcount">0 Parasites</strong></span>
+      <span class="chip">Role <strong>Strategic Core</strong></span>
+    </div>
+    <div class="cta" style="justify-content:flex-start;margin-top:34px"><a class="btn" href="apply.html?gang=zm">Apply to ZM</a><button class="btn alt" type="button" data-scroll="roster">See the Roster</button></div>
+  </header>
+
+  <div class="wrap">
+    <section id="roster">
+      <div class="sec-line rv"><h2>The Bloom</h2><span id="rcount">0 Members</span></div>
+      <div class="roster" id="rgrid"><div class="msg">Loading roster...</div></div>
+    </section>
+
+    <section id="creed">
+      <div class="sec-line rv"><h2>How We Grow</h2><span>The bond</span></div>
+      <div class="pillars">
+        <article class="pillar rv" data-tilt><span class="pk">The Bond</span><h3>One Mind</h3><p>ZM moves as a single organism. When one of us sees the opening, all of us already know.</p></article>
+        <article class="pillar rv" data-tilt><span class="pk">The Bloom</span><h3>Beauty as a weapon</h3><p>Calm on the surface, lethal underneath. We let the enemy admire it right up to the moment it ends.</p></article>
+        <article class="pillar rv" data-tilt><span class="pk">The Spread</span><h3>Always Growing</h3><p>Every new member strengthens the whole. The bond reaches further each season.</p></article>
+      </div>
+    </section>
+
+    <section id="allies">
+      <div class="sec-line rv"><h2>The Alliance</h2><span>Stronger together</span></div>
+      <div class="chips" style="margin-top:0">
+        <a class="chip" href="index.html" style="text-decoration:none"><strong>Celestial Syndicate</strong></a>
+        <a class="chip" href="asuka.html" style="text-decoration:none"><strong>ASUKA</strong></a>
+        <a class="chip" href="toman.html" style="text-decoration:none"><strong>TOMAN</strong></a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({
+  active: 'zm',
+  boot: { title: 'ZM', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g transform="translate(70 70)" fill="none" stroke="#ff4fa3" stroke-width="1.6"><g><ellipse rx="10" ry="38" cy="-32"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(45)"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(90)"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(135)"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(180)"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(225)"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(270)"/><ellipse rx="10" ry="38" cy="-32" transform="rotate(315)"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="14s" repeatCount="indefinite"/></g><circle r="9" fill="#ffc2e2" stroke="none"><animate attributeName="r" values="7;12;7" dur="1.8s" repeatCount="indefinite"/></circle></g></svg>', msgs: [[0,"Germinating"],[30,"Spreading spores"],[62,"Binding the bloom"],[90,"In bloom"]] }
+});
+CS.scene(CS.scenes.zm);
+CS.load(['zm']).then(function (d) {
+  var g = d.zm, n = (g.members || []).length;
+  document.getElementById('founded').textContent = CS.fmtDate(g.created);
+  document.getElementById('mcount').textContent = n + ' Parasites';
+  document.getElementById('rcount').textContent = n + (n === 1 ? ' Member' : ' Members');
+  CS.roster(document.getElementById('rgrid'), g.members, 'The bloom is still opening', 'ZM members will appear here soon.', 'zm');
+}).catch(function (e) { document.getElementById('rgrid').innerHTML = '<div class="msg err">Could not load roster: ' + CS.esc(e.message) + '</div>'; });
+</script>
+</body>
+</html>

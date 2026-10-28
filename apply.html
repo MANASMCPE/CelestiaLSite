@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Apply | Celestial Syndicate</title>
+<meta name="description" content="Apply to join Celestial Syndicate, ASUKA, ZM or TOMAN.">
+<meta name="theme-color" content="#04050d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <section style="padding-top:20px">
+    <div class="sh rv"><div class="kick">Reviewed manually</div><h2>Join the Syndicate</h2></div>
+    <p class="lead rv" style="margin:-10px auto 38px;text-align:center">Fill this out honestly. We review every application by hand. Impressing us matters more than numbers.</p>
+    <div class="fwrap">
+      <form class="fcard rv" id="applyForm" novalidate>
+        <div class="row">
+          <div class="field"><label for="f-ign">In-Game Name *</label><input id="f-ign" name="ign" type="text" required maxlength="30" placeholder="Your in-game handle" autocomplete="off"></div>
+          <div class="field"><label for="f-disc">Discord Username *</label><input id="f-disc" name="discord" type="text" required maxlength="40" placeholder="username" autocomplete="off"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="f-gang">Preferred Gang *</label><select id="f-gang" name="gang" required><option value="">Select</option><option>Celestial Syndicate</option><option>ASUKA</option><option>ZM</option><option>TOMAN</option></select></div>
+          <div class="field"><label for="f-rank">Applying For *</label><select id="f-rank" name="rank" required><option value="">Select</option><option value="Member">Member (Entry)</option><option value="Elite">Elite</option><option value="Captain">Captain / Sentinel</option><option value="Leader">Leadership</option></select></div>
+        </div>
+        <div class="field"><label for="f-exp">Experience Level *</label><select id="f-exp" name="experience" required><option value="">Select</option><option value="New (under 3 months)">New: under 3 months</option><option value="Intermediate (3-12 months)">Intermediate: 3 to 12 months</option><option value="Veteran (1+ years)">Veteran: 1+ years</option><option value="Elite (3+ years)">Elite: 3+ years</option></select></div>
+        <div class="field"><label for="f-why">Why should we pick you? *</label><textarea id="f-why" name="reason" required maxlength="600" placeholder="Tell us about yourself, your strengths, and what you bring to the Syndicate."></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="f-web">Website</label><input id="f-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="agree"><input type="checkbox" id="agree" required><label for="agree">I have read the Syndicate rules and agree to follow them without exception.</label></div>
+        <div class="ferr" id="ferr" role="alert"></div>
+        <button class="btn" type="submit" id="submitBtn" style="width:100%">Submit Application</button>
+      </form>
+      <div class="done" id="done" hidden>
+        <h2>Application Received</h2>
+        <p>Your request has been logged. Our recruiters will review it and reach out on Discord if you are a fit.</p>
+        <a class="btn alt" href="index.html">&larr; Back to Hub</a>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'apply', boot: { title: 'Apply', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#7fd6ff" stroke-width="2"><circle cx="70" cy="70" r="46" stroke-dasharray="8 8"><animateTransform attributeName="transform" type="rotate" from="0 70 70" to="360 70 70" dur="8s" repeatCount="indefinite"/></circle><path d="M48 72 l16 16 l30 -34" stroke="#ff5fa8" stroke-width="5"/></g></svg>', msgs: [[0, 'Opening the gate'], [50, 'Preparing form'], [90, 'Ready']], dur: 1600 } });
+CS.scene(CS.scenes.stars);
+(function () {
+  var q = new URLSearchParams(location.search).get('gang'), map = { celestial: 'Celestial Syndicate', asuka: 'ASUKA', zm: 'ZM', toman: 'TOMAN' };
+  if (q && map[q]) document.getElementById('f-gang').value = map[q];
+  var form = document.getElementById('applyForm'), err = document.getElementById('ferr'), btn = document.getElementById('submitBtn');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); err.textContent = '';
+    if (!form.checkValidity()) { err.textContent = 'Please fill in every required field and accept the rules.'; form.reportValidity(); return; }
+    var fd = new FormData(form), body = {};
+    ['ign', 'discord', 'gang', 'rank', 'experience', 'reason', 'website'].forEach(function (k) { body[k] = String(fd.get(k) || '').trim(); });
+    btn.disabled = true; btn.textContent = 'Submitting...';
+    fetch('/api/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (x) {
+        if (!x.ok) throw new Error(x.j.error || 'Something went wrong. Please try again.');
+        form.hidden = true; document.getElementById('done').hidden = false; window.scrollTo(0, 0);
+      })
+      .catch(function (ex) { err.textContent = ex.message; btn.disabled = false; btn.textContent = 'Submit Application'; });
+  });
+})();
+</script>
+</body>
+</html>

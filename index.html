@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CelestiaL SyndicatE</title>
+<meta name="description" content="CelestiaL SyndicatE gang hub. Allied with ASUKA, ZM and TOMAN.">
+<meta name="theme-color" content="#04050d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* HUB: deep-space cyan, violet and rose. Fixed WebGL black hole behind a glass-panel column. */
+  :root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 24%, rgba(4,5,13,.45) 58%, rgba(4,5,13,.9) 100%); }
+  .hero h1 { text-shadow: 0 0 40px rgba(127,214,255,.4), 0 0 120px rgba(164,104,255,.45), 0 2px 18px rgba(0,0,0,.85); }
+  .hero h1 b { color: #e8f8ff; }
+  .hero .lead { text-shadow: 0 1px 14px rgba(0,0,0,.9); }
+  .hero .eyebrow { text-shadow: 0 0 10px #000, 0 0 22px #000, 0 0 36px #000; }
+  .ally .banner { font-size: 2rem; }
+  .boot-art i { position: absolute; border-radius: 50%; border: 1px solid rgba(127,214,255,.6); inset: 0; }
+  .boot-art i::after { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #e8f8ff; top: -4px; left: calc(50% - 4px); box-shadow: 0 0 12px var(--a1); }
+  .boot-art .r1 { animation: spin 3.2s linear infinite; }
+  .boot-art .r2 { inset: 18px; border-color: rgba(164,104,255,.7); animation: spin 2.2s linear infinite reverse; }
+  .boot-art .r3 { inset: 36px; border-color: rgba(255,95,168,.7); animation: spin 1.5s linear infinite; }
+  .boot-art .core { position: absolute; inset: 56px; border-radius: 50%; background: #000; box-shadow: 0 0 0 2px #e8f8ff, 0 0 34px 8px rgba(127,214,255,.55), 0 0 90px 24px rgba(164,104,255,.35); }
+</style>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('cs_boot'))document.documentElement.classList.add('no-boot')}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <section class="hero" style="padding-top:60px">
+    <div class="eyebrow">Alliance Network &middot; ASUKA &middot; ZM &middot; TOMAN</div>
+    <h1>Celestia<b>L</b><br>Syndicat<b>E</b></h1>
+    <p class="lead">We don't follow the stars. We <strong>are</strong> them. A brotherhood forged in the void, bound by loyalty.</p>
+    <div class="cta"><a class="btn" href="apply.html">Apply to Join</a><button class="btn alt" type="button" data-scroll="alliances">Explore Alliances</button></div>
+    <p class="hint">Move the mouse to tilt the black hole. Click for a shockwave.</p>
+  </section>
+
+  <section id="stats">
+    <div class="stats" id="stats-grid">
+      <div class="stat rv"><div class="num" data-count="0" id="st-members">0</div><div class="lbl">Members</div></div>
+      <div class="stat rv"><div class="num" data-count="3">0</div><div class="lbl">Allied Gangs</div></div>
+      <div class="stat rv"><div class="num" data-count="4">0</div><div class="lbl">Banners</div></div>
+      <div class="stat rv"><div class="num" data-count="2019" id="st-since">0</div><div class="lbl">Oldest Banner Since</div></div>
+    </div>
+  </section>
+
+  <section id="alliances">
+    <div class="sh rv"><div class="kick">United front</div><h2>Our Alliances</h2></div>
+    <div class="allies">
+      <a class="ally rv" href="asuka.html" data-tilt style="--g:#ff3b4a"><div class="banner">ASUKA</div><div class="body"><h3>ASUKA</h3><p>Swift, sharp, relentless. The blade in the dark. Strikes first, strikes hard.</p></div><div class="meta"><span id="c-asuka">0 Members</span><span>Enter &rarr;</span></div></a>
+      <a class="ally rv" href="zm.html" data-tilt style="--g:#ff3d8b"><div class="banner">ZM</div><div class="body"><h3>ZM</h3><p>Strategic masterminds. ZM controls the map, the timing, the tempo of every battle.</p></div><div class="meta"><span id="c-zm">0 Members</span><span>Enter &rarr;</span></div></a>
+      <a class="ally rv" href="toman.html" data-tilt style="--g:#f5c04a"><div class="banner">TOMAN</div><div class="body"><h3>TOMAN</h3><p>The unbreakable wall. TOMAN holds the line and never lets a brother fall alone.</p></div><div class="meta"><span id="c-toman">0 Members</span><span>Enter &rarr;</span></div></a>
+    </div>
+  </section>
+
+  <section id="explore">
+    <div class="sh rv"><div class="kick">More from the syndicate</div><h2>Explore</h2></div>
+    <div class="allies">
+      <a class="ally rv" href="events.html" data-tilt style="--g:#ff5fa8"><div class="banner">WARS</div><div class="body"><h3>Wars &amp; Events</h3><p>Upcoming wars, countdowns and results.</p></div></a>
+      <a class="ally rv" href="rules.html" data-tilt style="--g:#a468ff"><div class="banner">CODE</div><div class="body"><h3>Rules &amp; Ranks</h3><p>The code we live by and the rank ladder.</p></div></a>
+      <a class="ally rv" href="gallery.html" data-tilt style="--g:#7fd6ff"><div class="banner">MEDIA</div><div class="body"><h3>Gallery &amp; Discord</h3><p>Moments, clips and our Discord home.</p></div></a>
+    </div>
+  </section>
+  <section id="roster">
+    <div class="sh rv"><div class="kick">Our core</div><h2>Celestial Roster</h2></div>
+    <div class="roster" id="roster"><div class="msg">Loading roster...</div></div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({
+  active: 'hub',
+  boot: { title: 'Celestial Syndicate', art: '<i class="r1"></i><i class="r2"></i><i class="r3"></i><span class="core"></span>',
+    msgs: [[0, 'Locking orbit'], [30, 'Counting stars'], [60, 'Syncing alliance'], [90, 'Crossing the horizon']] }
+});
+CS.scene(CS.scenes.hub);
+CS.load(['celestial', 'asuka', 'zm', 'toman']).then(function (d) {
+  var total = 0, since = 9999;
+  ['celestial', 'asuka', 'zm', 'toman'].forEach(function (k) {
+    var n = (d[k].members || []).length; total += n;
+    var y = +String(d[k].created || '').slice(0, 4); if (y && y < since) since = y;
+    var el = document.getElementById('c-' + k); if (el) el.textContent = n + (n === 1 ? ' Member' : ' Members');
+  });
+  var m = document.getElementById('st-members'); m.dataset.count = total; if (!total) m.textContent = '0';
+  if (since < 9999) { var s = document.getElementById('st-since'); s.dataset.count = since; }
+  CS.counters(document.getElementById('stats'));
+  CS.roster(document.getElementById('roster'), d.celestial.members, 'Roster is being assembled', 'Celestial members will appear here soon.', 'celestial');
+}).catch(function (e) { document.getElementById('roster').innerHTML = '<div class="msg err">Could not load roster: ' + CS.esc(e.message) + '</div>'; });
+</script>
+</body>
+</html>

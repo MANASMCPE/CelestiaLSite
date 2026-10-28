@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TOMAN | Celestial Syndicate</title>
+<meta name="description" content="TOMAN, the frontline guard of the Celestial Syndicate alliance.">
+<meta name="theme-color" content="#070605">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🏮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+
+  /* TOMAN: lantern-lit night shrine. Gold hairlines, vermilion stamps, Noto Serif JP headings, vertical kanji. */
+  :root { --bg:#070605; --fg:#f6ecd8; --mute:#bba98a; --a1:#f0c05a; --a2:#e3202a; --a3:#ffe2a0; --on-a:#120d05; --card:rgba(18,13,8,.72); --line:rgba(240,192,90,.3); --nav-bg:rgba(7,6,5,.82); --r:2px; --bw:1px; --f-display:"Noto Serif JP","Hiragino Mincho ProN",serif; --f-body:"Noto Sans JP","Hiragino Sans",sans-serif; --f-mono:"Noto Sans JP",sans-serif; --veil: radial-gradient(ellipse at 50% 40%, transparent 0 24%, rgba(7,6,5,.5) 60%, rgba(7,6,5,.93) 100%); }
+  .kanji { position:fixed; right:max(10px,1.5vw); top:84px; z-index:1; pointer-events:none; writing-mode:vertical-rl; font-family:var(--f-display); font-weight:900; font-size:clamp(4rem,12vw,9rem); line-height:1; color:transparent; -webkit-text-stroke:1px rgba(240,192,90,.28); letter-spacing:.1em; }
+  .gtitle { font-weight:900; letter-spacing:.06em; color:var(--a3); text-shadow:0 0 50px rgba(240,192,90,.45), 0 4px 0 #8a1218; }
+  .gh { align-items:flex-start; }
+  .gkick { letter-spacing:.3em; color:var(--a2); }
+  .gkick::before { content:""; width:18px; height:18px; background:var(--a2); display:inline-block; box-shadow:0 0 14px var(--a2); }
+  .sec-line h2, .pillar h3, .brand, .ally h3 { font-weight:700; }
+  .sec-line { border-bottom:1px solid var(--line); position:relative; }
+  .sec-line::after { content:"\25C6"; position:absolute; left:0; bottom:-9px; color:var(--a1); font-size:13px; background:var(--bg); padding-right:10px; }
+  .btn { background:var(--a1); color:var(--on-a); border:1px solid var(--a1); font-weight:700; letter-spacing:.16em; }
+  .btn:hover { background:var(--a3); box-shadow:0 0 30px rgba(240,192,90,.45); }
+  .btn.alt { background:transparent; color:var(--fg); border-color:var(--line); }
+  .mem, .pillar, .chip { outline:1px solid rgba(240,192,90,.14); outline-offset:-5px; }
+  .mem:hover { border-color:var(--a1); box-shadow:0 18px 50px -24px var(--a1); }
+  .mem .idx { color:var(--a2); font-weight:900; }
+  .badge { border-radius:0; border-color:var(--a1); }
+  .badge.lead { background:var(--a2); color:#fff; border-color:var(--a2); }
+  .badge.high { border-color:var(--a2); color:#ff6b73; }
+  .pillar .pk { color:var(--a2); }
+  .pillar { border-top:2px solid var(--a2); }
+  @media (max-width: 720px) { .kanji { opacity:.5; font-size:4rem; top:70px; } }
+
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
+  .pillar { padding: 28px 26px; background: var(--card); border: var(--bw) solid var(--line); border-radius: var(--r); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .pillar .pk { font-family: var(--f-mono); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--a1); }
+  .pillar h3 { font-family: var(--f-display); font-weight: 400; font-size: 1.4rem; margin: 10px 0 8px; letter-spacing: .04em; }
+  .pillar p { color: var(--mute); }
+
+</style>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('cs_boot'))document.documentElement.classList.add('no-boot')}catch(e){}</script>
+</head>
+<body data-gang="toman">
+<div class="veil"></div>
+<div class="kanji" aria-hidden="true">東京</div>
+<main>
+  <header class="gh wrap">
+    <div class="gkick">東京 &middot; Tokyo Manji</div>
+    <h1 class="gtitle">TOMAN</h1>
+    <p class="gtag">Brothers till the end. TOMAN does not fight for territory. It fights for the family standing beside it.</p>
+    <div class="chips">
+      <span class="chip">Founded <strong id="founded">03 Nov 2019</strong></span>
+      <span class="chip">Members <strong id="mcount">0 Brothers</strong></span>
+      <span class="chip">Role <strong>Frontline Guard</strong></span>
+    </div>
+    <div class="cta" style="justify-content:flex-start;margin-top:34px"><a class="btn" href="apply.html?gang=toman">Apply to TOMAN</a><button class="btn alt" type="button" data-scroll="roster">See the Roster</button></div>
+  </header>
+
+  <div class="wrap">
+    <section id="roster">
+      <div class="sec-line rv"><h2>The Brotherhood</h2><span id="rcount">0 Members</span></div>
+      <div class="roster" id="rgrid"><div class="msg">Loading roster...</div></div>
+    </section>
+
+    <section id="creed">
+      <div class="sec-line rv"><h2>Our Oath</h2><span>Never alone</span></div>
+      <div class="pillars">
+        <article class="pillar rv" data-tilt><span class="pk">One</span><h3>Brotherhood</h3><p>No one in TOMAN walks alone. A fight for one is a fight for everyone standing in the line.</p></article>
+        <article class="pillar rv" data-tilt><span class="pk">Two</span><h3>Honor</h3><p>We keep our word to allies and enemies alike. A broken promise is the only real defeat.</p></article>
+        <article class="pillar rv" data-tilt><span class="pk">Three</span><h3>Resolve</h3><p>The wall does not move. When everything breaks, TOMAN is still on its feet.</p></article>
+      </div>
+    </section>
+
+    <section id="allies">
+      <div class="sec-line rv"><h2>The Alliance</h2><span>Stronger together</span></div>
+      <div class="chips" style="margin-top:0">
+        <a class="chip" href="index.html" style="text-decoration:none"><strong>Celestial Syndicate</strong></a>
+        <a class="chip" href="asuka.html" style="text-decoration:none"><strong>ASUKA</strong></a>
+        <a class="chip" href="zm.html" style="text-decoration:none"><strong>ZM</strong></a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({
+  active: 'toman',
+  boot: { title: 'TOMAN', art: '<svg viewBox="0 0 140 140" width="140" height="140"><circle cx="100" cy="36" r="16" fill="#f0c05a" opacity=".9"><animate attributeName="opacity" values=".6;1;.6" dur="2.4s" repeatCount="indefinite"/></circle><g fill="none" stroke="#e3202a" stroke-width="5" stroke-linecap="square"><path d="M22 52 H118"/><path d="M30 68 H110" stroke-width="3.5"/><path d="M42 52 V118"/><path d="M98 52 V118"/><path d="M14 44 Q70 56 126 44" stroke="#f0c05a" stroke-width="4"/></g></svg>', msgs: [[0,"Lighting lanterns"],[30,"Crossing the gate"],[62,"Gathering brothers"],[90,"Welcome home"]] }
+});
+CS.scene(CS.scenes.toman);
+CS.load(['toman']).then(function (d) {
+  var g = d.toman, n = (g.members || []).length;
+  document.getElementById('founded').textContent = CS.fmtDate(g.created);
+  document.getElementById('mcount').textContent = n + ' Brothers';
+  document.getElementById('rcount').textContent = n + (n === 1 ? ' Member' : ' Members');
+  CS.roster(document.getElementById('rgrid'), g.members, 'The brothers are gathering', 'TOMAN members will appear here soon.', 'toman');
+}).catch(function (e) { document.getElementById('rgrid').innerHTML = '<div class="msg err">Could not load roster: ' + CS.esc(e.message) + '</div>'; });
+</script>
+</body>
+</html>

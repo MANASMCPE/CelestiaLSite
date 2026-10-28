@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Member Profile | Celestial Syndicate</title>
+<meta name="description" content="Profile of a Celestial alliance member.">
+<meta name="theme-color" content="#04050d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <div id="p"><div class="msg" style="padding-top:90px">Loading profile...</div></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: '', boot: null });
+CS.scene(CS.scenes.stars);
+var q = new URLSearchParams(location.search), gk = q.get('g'), mid = q.get('m'), box = document.getElementById('p');
+function fail(t, d) { box.innerHTML = '<div class="empty" style="margin-top:90px"><b>' + t + '</b>' + d + '<div style="margin-top:20px"><a class="btn" href="leaderboard.html">Back to leaderboard</a></div></div>'; }
+if (!CS.GANGS[gk]) fail('Gang nahi mila', 'Link galat hai.');
+else {
+  CS.applyTheme(gk);
+  CS.load([gk]).then(function (d) {
+    var g = d[gk], ids = CS.ids(g.members), i = ids.indexOf(mid);
+    if (i < 0) return fail('Member nahi mila', 'Ye member roster mein nahi hai.');
+    var m = g.members[i], pts = m.points || 0, max = Math.max.apply(null, g.members.map(function (x) { return x.points || 0; }).concat(1));
+    var rank = g.members.slice().sort(function (a, b) { return (b.points || 0) - (a.points || 0); }).indexOf(m) + 1;
+    var av = /^(https?:\/\/|[\w./-]+$)/i.test(m.avatar || '') ? '<img src="' + CS.esc(m.avatar) + '" alt="' + CS.esc(m.name) + '">' : CS.esc((m.name || '?').charAt(0).toUpperCase());
+    document.title = m.name + ' | ' + g.gang;
+    box.innerHTML = '<div class="prof"><aside class="pcard rise"><div class="pav">' + av + '</div><h1>' + CS.esc(m.name) + '</h1><div class="gn">' + CS.esc(g.gang) + '</div><span class="badge ' + CS.tier(m) + '">' + CS.esc(m.rank || 'Member') + '</span></aside><div>' +
+      '<div class="pstats rise"><div class="ps"><b>' + pts.toLocaleString() + '</b><span>Points</span></div><div class="ps"><b>#' + rank + '</b><span>Gang rank</span></div><div class="ps"><b>' + CS.esc(m.kd || '—') + '</b><span>K/D</span></div><div class="ps"><b>' + (m.wars != null ? CS.esc(m.wars) : '—') + '</b><span>Wars</span></div><div class="ps"><b style="font-size:1.2rem;line-height:2rem">' + CS.fmtDate(m.joined) + '</b><span>Joined</span></div></div>' +
+      '<div class="panel pbio rise"><h3>Points progress</h3><div class="bar"><i id="bar"></i></div></div>' +
+      (m.bio ? '<div class="panel pbio rise"><h3>About</h3><p>' + CS.esc(m.bio) + '</p></div>' : '') +
+      ((m.badges || []).length ? '<div class="panel pbio rise"><h3>Achievements</h3><div class="bdg">' + m.badges.map(function (b) { return '<span>' + CS.esc(b) + '</span>'; }).join('') + '</div></div>' : '') +
+      '<div class="pnav"><a class="btn" href="' + CS.GANGS[gk].page + '">&larr; ' + CS.esc(CS.GANGS[gk].short) + ' roster</a><a class="btn alt" href="leaderboard.html">Leaderboard</a>' + (i > 0 ? '<a class="btn alt" href="' + CS.esc(CS.mlink(gk, ids[i - 1])) + '">Prev</a>' : '') + (i < ids.length - 1 ? '<a class="btn alt" href="' + CS.esc(CS.mlink(gk, ids[i + 1])) + '">Next</a>' : '') + '</div></div></div>';
+    setTimeout(function () { document.getElementById('bar').style.width = Math.round(pts / max * 100) + '%'; }, 200);
+  }).catch(function (e) { fail('Load nahi hua', CS.esc(e.message)); });
+}
+</script>
+</body>
+</html>
