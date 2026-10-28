@@ -1,8 +1,0 @@
-{
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/asuka", "destination": "/asuka.html" },
-    { "source": "/zm", "destination": "/zm.html" },
-    { "source": "/toman", "destination": "/toman.html" }
-  ]
-}
