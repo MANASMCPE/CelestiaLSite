@@ -74,3 +74,30 @@ Images repo me `img/` folder bana ke daalo (ya https link). Video: `.mp4/.webm`.
   "badges": ["War Hero"], "id": "rex" }
 ```
 `id` na do to naam se slug ban jata hai (same naam ho to `rex-2`). Profile page apni gang ki theme me khulta hai.
+
+---
+
+## v3 — Planets & effects
+
+- **/cosmos**: 3D planet explorer — Earth, Moon, Mars, Venus, Jupiter, Saturn (rings), Uranus, Neptune. Chips / arrows / swipe / keyboard, plus auto *Tour*. Planets bina kisi image file ke code se bante hain (`planets.js`), isliye load fast hai.
+- Hub aur utility pages ke background me Jupiter, Mars, Saturn, Earth ghoomte hain.
+- Naye effects: shooting stars, scroll progress bar, back-to-top, magnetic + ripple buttons, card spotlight, text scramble, marquee ticker.
+- Mobile: hamburger menu (full-screen), 44px+ touch targets, kam particles, planets ke chhote textures. `prefers-reduced-motion` par animations band.
+
+---
+
+## Appeal -> Discord notification
+
+Jab koi player Apply form submit kare, uski poori info Discord par aa jati hai.
+
+**Easy tarika (webhook, recommended)**
+1. Discord me ek private channel banao (sirf tum dekh sako), e.g. `#applications`.
+2. Channel settings -> Integrations -> Webhooks -> New Webhook -> **Copy Webhook URL**.
+3. Vercel -> Project -> Settings -> Environment Variables: `DISCORD_WEBHOOK_URL` = wo URL. Redeploy karo.
+4. (Optional) Apna Discord **User ID** `DISCORD_USER_ID` me daalo to message me tumhe @ping bhi milega. (Discord Settings -> Advanced -> Developer Mode on, phir apni profile par right-click -> Copy User ID.)
+
+**Direct DM (bot)** — `DISCORD_BOT_TOKEN` (Developer Portal -> New Application -> Bot -> Token) + `DISCORD_USER_ID`. Bot ko kisi server me add karna hoga jisme tum bhi ho, aur tumhare DMs open hone chahiye.
+
+Dono ek saath on ho sakte hain. Redis na bhi ho, Discord notification pahunchte hi application "sent" maani jati hai.
+
+**Instagram:** Instagram website se seedha message bhejne ki permission nahi deta, isliye submit ke baad "Send on Instagram" button aata hai. Wo application ka text copy karke `instagram.com/scripterzmonk` ki DM khol deta hai; player paste karke send karta hai. Username badalna ho to `apply.html` me `IG = 'scripterzmonk'`.

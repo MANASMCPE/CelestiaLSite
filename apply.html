@@ -40,6 +40,9 @@
       <div class="done" id="done" hidden>
         <h2>Application Received</h2>
         <p>Your request has been logged. Our recruiters will review it and reach out on Discord if you are a fit.</p>
+        <p style="margin-top:22px">Jaldi reply chahiye? Apni application Instagram par bhi bhej do:</p>
+        <p><button type="button" class="btn" id="igBtn">Send on Instagram</button></p>
+        <p class="hint" id="igNote" role="status"></p>
         <a class="btn alt" href="index.html">&larr; Back to Hub</a>
       </div>
     </div>
@@ -47,6 +50,7 @@
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="shared.js"></script>
+<script src="planets.js"></script>
 <script src="scenes.js"></script>
 <script>
 CS.init({ active: 'apply', boot: { title: 'Apply', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#7fd6ff" stroke-width="2"><circle cx="70" cy="70" r="46" stroke-dasharray="8 8"><animateTransform attributeName="transform" type="rotate" from="0 70 70" to="360 70 70" dur="8s" repeatCount="indefinite"/></circle><path d="M48 72 l16 16 l30 -34" stroke="#ff5fa8" stroke-width="5"/></g></svg>', msgs: [[0, 'Opening the gate'], [50, 'Preparing form'], [90, 'Ready']], dur: 1600 } });
@@ -54,6 +58,15 @@ CS.scene(CS.scenes.stars);
 (function () {
   var q = new URLSearchParams(location.search).get('gang'), map = { celestial: 'Celestial Syndicate', asuka: 'ASUKA', zm: 'ZM', toman: 'TOMAN' };
   if (q && map[q]) document.getElementById('f-gang').value = map[q];
+  var lastBody = null, IG = 'scripterzmonk';
+  document.getElementById('igBtn').addEventListener('click', function () {
+    var b = lastBody; if (!b) return;
+    var t = 'NEW APPLICATION\nIGN: ' + b.ign + '\nDiscord: ' + b.discord + '\nGang: ' + b.gang + '\nApplying for: ' + b.rank + '\nExperience: ' + b.experience + '\nWhy: ' + b.reason;
+    var note = document.getElementById('igNote');
+    function go() { window.open('https://ig.me/m/' + IG, '_blank', 'noopener'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { note.textContent = 'Application copy ho gayi. Instagram chat me paste karke send karo.'; go(); }, function () { note.textContent = 'Copy nahi hua. Instagram chat me apni details khud likh do.'; go(); });
+    else { note.textContent = 'Instagram chat me apni details khud likh do.'; go(); }
+  });
   var form = document.getElementById('applyForm'), err = document.getElementById('ferr'), btn = document.getElementById('submitBtn');
   form.addEventListener('submit', function (e) {
     e.preventDefault(); err.textContent = '';
@@ -65,7 +78,7 @@ CS.scene(CS.scenes.stars);
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (x) {
         if (!x.ok) throw new Error(x.j.error || 'Something went wrong. Please try again.');
-        form.hidden = true; document.getElementById('done').hidden = false; window.scrollTo(0, 0);
+        form.hidden = true; document.getElementById('done').hidden = false; window.scrollTo(0, 0); lastBody = body;
       })
       .catch(function (ex) { err.textContent = ex.message; btn.disabled = false; btn.textContent = 'Submit Application'; });
   });

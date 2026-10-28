@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cosmos | Celestial Syndicate</title>
+<meta name="description" content="Fly through the planets: Earth, Mars, Jupiter, Saturn and more in 3D.">
+<meta name="theme-color" content="#04050d">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } footer{display:none} html,body{overflow-x:hidden} .cos{position:fixed;inset:0;z-index:5;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;padding:0 max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom))} .cos>*{pointer-events:auto}</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil" style="opacity:.55"></div>
+<div class="cos">
+  <div class="cinfo" id="info" aria-live="polite"></div>
+  <div class="cnav">
+    <button type="button" class="cb" id="prev" aria-label="Previous planet">&#8249;</button>
+    <div class="cchips" id="chips" role="tablist" aria-label="Planets"></div>
+    <button type="button" class="cb" id="next" aria-label="Next planet">&#8250;</button>
+    <button type="button" class="cb tour" id="tour" aria-pressed="false" aria-label="Auto tour">&#9654; Tour</button>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="planets.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'cosmos', boot: { title: 'Cosmos', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#7fd6ff" stroke-width="2"><circle cx="70" cy="70" r="14" stroke="#ffb347"/><ellipse cx="70" cy="70" rx="56" ry="22" transform="rotate(-24 70 70)"><animate attributeName="stroke-dasharray" values="0 400;400 0" dur="2s" repeatCount="indefinite"/></ellipse><circle cx="118" cy="52" r="5" fill="#ff5fa8" stroke="none"/></g></svg>', msgs: [[0, 'Igniting the sun'], [40, 'Spinning planets'], [80, 'Plotting course']], dur: 1900 } });
+var DATA = {
+  earth: ['Earth', 'Home base', '12,742 km', '24 h', '1', 'The only world we know that holds life. 71% of its surface is ocean.'],
+  moon: ['Moon', 'Earth\'s companion', '3,474 km', '27.3 days', '—', 'Always shows us the same face. Its gravity drives our ocean tides.'],
+  mars: ['Mars', 'The red planet', '6,779 km', '24.6 h', '2', 'Home to Olympus Mons, the tallest volcano in the solar system at about 22 km.'],
+  venus: ['Venus', 'The veiled furnace', '12,104 km', '243 days', '0', 'Hottest planet at around 465 °C, and it spins backwards compared to most planets.'],
+  jupiter: ['Jupiter', 'The giant', '139,820 km', '9.9 h', '90+', 'Bigger than all other planets combined. Its Great Red Spot is a storm older than 150 years.'],
+  saturn: ['Saturn', 'Lord of the rings', '116,460 km', '10.7 h', '140+', 'Its rings are mostly water ice and span up to 280,000 km but are often only ~10 m thick.'],
+  uranus: ['Uranus', 'The sideways ice giant', '50,724 km', '17.2 h', '28', 'Tilted by about 98°, so it rolls around the Sun on its side.'],
+  neptune: ['Neptune', 'The windy deep blue', '49,244 km', '16.1 h', '16', 'Winds reach roughly 2,000 km/h, the fastest measured on any planet.']
+}, S, cur = 0, timer = null;
+S = CS.scene(CS.scenes.cosmos);
+var info = document.getElementById('info'), chips = document.getElementById('chips');
+if (!S) { info.innerHTML = '<div class="msg">3D is not available on this device, but the planets are still out there.</div>'; }
+else {
+  var names = S.names;
+  chips.innerHTML = names.map(function (n, i) { return '<button type="button" class="chip" role="tab" data-i="' + i + '">' + DATA[n][0] + '</button>'; }).join('');
+  S.onFocus = function (i) {
+    cur = i; var d = DATA[names[i]];
+    CS.$$('.chip', chips).forEach(function (c, j) { c.classList.toggle('on', j === i); c.setAttribute('aria-selected', j === i); });
+    var on = CS.$('.chip.on', chips); if (on && on.scrollIntoView) { var l = on.offsetLeft - chips.clientWidth / 2 + on.clientWidth / 2; chips.scrollTo({ left: l, behavior: CS.reduce ? 'auto' : 'smooth' }); }
+    info.classList.remove('in'); void info.offsetWidth;
+    info.innerHTML = '<div class="ck">' + d[1] + '</div><h1>' + d[0] + '</h1><p>' + d[5] + '</p><dl><div><dt>Diameter</dt><dd>' + d[2] + '</dd></div><div><dt>Day</dt><dd>' + d[3] + '</dd></div><div><dt>Moons</dt><dd>' + d[4] + '</dd></div></dl>';
+    info.classList.add('in');
+  };
+  S.focus(0);
+  chips.addEventListener('click', function (e) { var b = e.target.closest('.chip'); if (b) { stop(); S.focus(+b.dataset.i); } });
+  document.getElementById('prev').onclick = function () { stop(); S.focus(cur - 1); };
+  document.getElementById('next').onclick = function () { stop(); S.focus(cur + 1); };
+  var tb = document.getElementById('tour');
+  function stop() { if (timer) { clearInterval(timer); timer = null; tb.setAttribute('aria-pressed', 'false'); tb.innerHTML = '&#9654; Tour'; } }
+  tb.onclick = function () { if (timer) return stop(); tb.setAttribute('aria-pressed', 'true'); tb.innerHTML = '&#10074;&#10074; Stop'; S.focus(cur + 1); timer = setInterval(function () { S.focus(cur + 1); }, 4500); };
+  addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { stop(); S.focus(cur + 1); } if (e.key === 'ArrowLeft') { stop(); S.focus(cur - 1); } });
+  var sx = null; addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', function (e) { if (sx == null) return; var dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 60 && !e.target.closest('.cchips')) { stop(); S.focus(cur + (dx < 0 ? 1 : -1)); } }, { passive: true });
+}
+</script>
+</body>
+</html>

@@ -35,6 +35,33 @@
     return new THREE.Points(g, new THREE.PointsMaterial({ map: dot(THREE), alphaTest: 0.01, size: size || 1.4, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true }));
   }
 
+
+  /* Background planets placed by screen fraction so they sit in the corners on every aspect ratio. */
+  function bgPlanets(THREE, scene, camera, S, list, camZ) {
+    CS.sunLight(THREE, scene, 1.5);
+    var items = list.filter(function (d) { return !(S.mobile && d.hideM); }).map(function (d) {
+      var p = CS.planet(THREE, d.kind, d.r, { mobile: S.mobile }); p.userData.d = d; scene.add(p);
+      if (d.kind === 'saturn') p.rotation.z = 0.25;
+      return p;
+    });
+    function place() {
+      var tn = Math.tan(27.5 * Math.PI / 180);
+      items.forEach(function (p) {
+        var d = p.userData.d, dist = camZ - d.z, hh = dist * tn, hw = hh * (S.w / S.h), k = S.mobile ? (d.m || 0.62) : 1;
+        p.scale.setScalar(k); p.userData.bx = d.nx * hw * (S.mobile ? (d.mx == null ? d.nx : d.mx) / d.nx : 1); p.userData.by = d.ny * hh; p.position.z = d.z;
+      });
+    }
+    var prev = S.onResize; S.onResize = function () { if (prev) prev(); place(); }; place();
+    return function (t, dt) {
+      items.forEach(function (p) {
+        p.userData.update(dt);
+        p.position.x = p.userData.bx + Math.sin(t * 0.15 + p.userData.d.z) * 1.5;
+        p.position.y = p.userData.by + Math.cos(t * 0.12 + p.userData.d.z) * 1.2 + S.scroll * (p.userData.d.par || 14);
+        p.rotation.y = S.mouse.x * 0.12;
+      });
+    };
+  }
+
   /* =====================================================================
      HUB: black hole with a shader-driven, Keplerian accretion disk
      ===================================================================== */
@@ -107,8 +134,15 @@
       bh.scale.setScalar(sc); bh.userData.baseY = S.mobile ? 13 : 13;
     }
     S.onResize = place; place();
+    var pl = bgPlanets(THREE, scene, camera, S, [
+      { kind: 'jupiter', r: 24, nx: -0.82, ny: -0.5, z: -190, par: 16 },
+      { kind: 'mars', r: 6.5, nx: 0.88, ny: 0.5, z: -120, par: 24, m: 0.8 },
+      { kind: 'saturn', r: 11, nx: -0.74, ny: 0.68, z: -260, par: 10 },
+      { kind: 'earth', r: 8, nx: 0.78, ny: -0.72, z: -150, par: 18, m: 0.8, hideM: 1 }
+    ], 72);
 
-    return function (t) {
+    return function (t, dt) {
+      pl(t, dt);
       var intro = Math.min(1, t / 3.2), e = 1 - Math.pow(1 - intro, 3);
       camera.position.set(S.mouse.x * 7, S.mouse.y * 4 + 2, 118 - 46 * e);
       camera.lookAt(0, 0, 0);
@@ -336,9 +370,59 @@
     var a = stars(THREE, S.mobile ? 1400 : 3000, cols, 330, 800, 2.4); scene.add(a);
     var b = stars(THREE, S.mobile ? 500 : 1100, cols, 140, 320, 1.6); scene.add(b);
     scene.add(glow(THREE, '#7b6bff', 260, [0, 0, -220], 0.35));
-    return function (t) {
+    var pl = bgPlanets(THREE, scene, camera, S, [
+      { kind: 'jupiter', r: 22, nx: 0.86, ny: -0.62, z: -200, par: 12 },
+      { kind: 'mars', r: 5.5, nx: -0.86, ny: 0.58, z: -140, par: 18, m: 0.8 }
+    ], 80);
+    return function (t, dt) {
+      pl(t, dt);
       a.rotation.y = t * 0.02 + S.mouse.x * 0.06; a.rotation.x = S.mouse.y * 0.05; b.rotation.y = -t * 0.035;
       camera.position.set(S.mouse.x * 6, S.mouse.y * 4, 80 - S.scroll * 10); camera.lookAt(0, 0, 0);
+    };
+  };
+
+  /* =====================================================================
+     COSMOS: fly-through planet explorer
+     ===================================================================== */
+  CS.scenes.cosmos = function (THREE, scene, camera, S) {
+    var cols = [0xa8d8ff, 0xc8b4ff, 0xffd0e4, 0xffffff];
+    var far = stars(THREE, S.mobile ? 1600 : 3400, cols, 500, 1400, 2.6); scene.add(far);
+    scene.add(glow(THREE, '#7b6bff', 700, [-200, 60, -500], 0.35)); scene.add(glow(THREE, '#ff5fa8', 600, [320, -80, -600], 0.22)); scene.add(glow(THREE, '#3aa6ff', 520, [60, 160, -700], 0.22));
+    CS.sunLight(THREE, scene, 1.9);
+    var DEF = [['earth', 10], ['moon', 3.2], ['mars', 7], ['venus', 9.5], ['jupiter', 26], ['saturn', 17], ['uranus', 12], ['neptune', 11.5]];
+    var planets = [], x = 0;
+    DEF.forEach(function (d, i) {
+      var p = CS.planet(THREE, d[0], d[1], { mobile: S.mobile }), r = d[1] * (d[0] === 'saturn' ? 2.4 : 1);
+      x += (i ? (planets[i - 1].userData.ext + r) : 0) + (i ? 34 : 0);
+      p.userData.ext = r; p.position.set(x, Math.sin(i * 1.7) * 8, -Math.cos(i * 1.3) * 26); scene.add(p); planets.push(p);
+    });
+    var belt = (function () {
+      var n = S.mobile ? 600 : 1600, g = new THREE.BufferGeometry(), p = new Float32Array(n * 3);
+      for (var i = 0; i < n; i++) { var a = Math.random() * 6.283, r = 60 + Math.random() * 40; p[i * 3] = Math.cos(a) * r; p[i * 3 + 1] = (Math.random() - 0.5) * 6; p[i * 3 + 2] = Math.sin(a) * r; }
+      g.setAttribute('position', new THREE.BufferAttribute(p, 3));
+      var pts = new THREE.Points(g, new THREE.PointsMaterial({ map: dot(THREE), alphaTest: 0.01, size: 1.6, color: 0xb9a58c, transparent: true, opacity: 0.85, depthWrite: false }));
+      pts.position.copy(planets[2].position).add(new THREE.Vector3(0, 0, -50)); scene.add(pts); return pts;
+    })();
+    var cur = 0, lookNow = new THREE.Vector3(), camNow = new THREE.Vector3(), init = true;
+    S.count = planets.length; S.names = DEF.map(function (d) { return d[0]; });
+    S.focus = function (i) { cur = (i + planets.length) % planets.length; if (S.onFocus) S.onFocus(cur); };
+    function target() {
+      var p = planets[cur], r = p.userData.ext, h = Math.tan(27.5 * Math.PI / 180), asp = S.w / S.h;
+      var dist = Math.max(r * 2.5, 3) / Math.min(h, h * asp) * (S.mobile ? 0.62 : 0.85);
+      var look = p.position.clone(), pos = p.position.clone();
+      if (S.mobile) look.y -= r * 0.9; else look.x -= r * 1.05;
+      pos.x = look.x + S.mouse.x * r * 0.5; pos.y += r * 0.18 + S.mouse.y * r * 0.3; pos.z = p.position.z + dist;
+      return { look: look, pos: pos };
+    }
+    S.onResize = function () { init = true; };
+    return function (t, dt) {
+      var tg = target();
+      if (init) { camNow.copy(tg.pos); lookNow.copy(tg.look); init = false; }
+      var k = 1 - Math.pow(0.012, dt);
+      camNow.lerp(tg.pos, k); lookNow.lerp(tg.look, k);
+      camera.position.copy(camNow); camera.lookAt(lookNow);
+      planets.forEach(function (p) { p.userData.update(dt); });
+      belt.rotation.y = t * 0.03; far.rotation.y = t * 0.004;
     };
   };
 })();
