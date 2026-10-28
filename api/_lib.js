@@ -1,4 +1,4 @@
-use strict';
+'use strict';
 const crypto = require('crypto');
 
 /* ---------- storage: Upstash Redis over REST (Vercel Marketplace sets these env vars) ---------- */
