@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>404 | Celestial Syndicate</title>
+<meta name="description" content="Page not found.">
+<meta name="theme-color" content="#04050d">
+<meta property="og:title" content="Timeline | Celestial Syndicate">
+<meta property="og:description" content="Page not found.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <div class="e404 rv">
+    <div>
+      <div class="big">404</div>
+      <h2>Ye galaxy mein nahi hai</h2>
+      <p>Jo page tum dhoondh rahe ho wo move ho gaya ya kabhi tha hi nahi. Hub par wapas chalo ya search karo (<kbd>/</kbd>).</p>
+      <div class="btns"><a class="btn" href="index.html">&larr; Back to Hub</a><a class="btn alt" href="members.html">Browse Members</a></div>
+    </div>
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="planets.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: '', boot: null });
+CS.scene(CS.scenes.stars);
+</script>
+</body>
+</html>

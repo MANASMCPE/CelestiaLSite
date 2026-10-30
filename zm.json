@@ -1,5 +1,64 @@
 {
   "gang": "ZM",
   "created": "2020-07-22",
-  "members": []
+  "members": [
+    {
+      "name": "Seraph",
+      "rank": "Leader",
+      "points": 5100,
+      "kd": "3.7",
+      "joined": "2020-07-22",
+      "wars": 36,
+      "bio": "[Example member — replace with your real roster] Founded Zero Mercy on one rule: show none.",
+      "tier": "lead",
+      "badges": [
+        "Founder",
+        "War Hero"
+      ]
+    },
+    {
+      "name": "Dusk",
+      "rank": "Co-Leader",
+      "points": 4300,
+      "kd": "3.2",
+      "joined": "2020-10-05",
+      "wars": 30,
+      "bio": "[Example member] Oversees ZM's war planning.",
+      "tier": "lead",
+      "badges": [
+        "Co-Leader"
+      ]
+    },
+    {
+      "name": "Iris",
+      "rank": "Elite",
+      "points": 3100,
+      "kd": "2.7",
+      "joined": "2021-12-01",
+      "wars": 21,
+      "bio": "[Example member] Petal-sharp and twice as deadly.",
+      "tier": "high",
+      "badges": [
+        "Elite"
+      ]
+    },
+    {
+      "name": "Wren",
+      "rank": "Veteran",
+      "points": 1950,
+      "kd": "2.0",
+      "joined": "2022-06-17",
+      "wars": 15,
+      "bio": "[Example member] Quiet, consistent, deadly."
+    },
+    {
+      "name": "Faye",
+      "rank": "Member",
+      "points": 820,
+      "kd": "1.5",
+      "joined": "2023-09-10",
+      "wars": 7,
+      "bio": "[Example member] Recently recruited."
+    }
+  ]
 }

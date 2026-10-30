@@ -1,5 +1,83 @@
 {
   "gang": "Celestial Syndicate",
   "created": "2020-01-01",
-  "members": []
+  "members": [
+    {
+      "name": "Orion",
+      "rank": "Leader",
+      "points": 5400,
+      "kd": "4.1",
+      "joined": "2020-01-01",
+      "wars": 41,
+      "bio": "[Example member — replace with your real roster] Founder of Celestial Syndicate. Leads every major war from the front.",
+      "tier": "lead",
+      "badges": [
+        "Founder",
+        "War Hero",
+        "100 Wins"
+      ]
+    },
+    {
+      "name": "Vega",
+      "rank": "Co-Leader",
+      "points": 4850,
+      "kd": "3.6",
+      "joined": "2020-03-12",
+      "wars": 38,
+      "bio": "[Example member] Handles recruitment and keeps the alliance calendar in order.",
+      "tier": "lead",
+      "badges": [
+        "Co-Leader",
+        "Recruiter"
+      ]
+    },
+    {
+      "name": "Nova",
+      "rank": "Elite",
+      "points": 3700,
+      "kd": "3.1",
+      "joined": "2021-06-20",
+      "wars": 29,
+      "bio": "[Example member] Frontline striker, known for clutch wars.",
+      "tier": "high",
+      "badges": [
+        "Elite",
+        "MVP x3"
+      ]
+    },
+    {
+      "name": "Lyra",
+      "rank": "Elite",
+      "points": 3300,
+      "kd": "2.8",
+      "joined": "2021-09-02",
+      "wars": 24,
+      "bio": "[Example member] Strategy lead for alliance meets.",
+      "tier": "high",
+      "badges": [
+        "Strategist"
+      ]
+    },
+    {
+      "name": "Cassio",
+      "rank": "Veteran",
+      "points": 2100,
+      "kd": "2.2",
+      "joined": "2022-02-14",
+      "wars": 17,
+      "bio": "[Example member] Been here since year one, rarely misses a war.",
+      "badges": [
+        "Veteran"
+      ]
+    },
+    {
+      "name": "Astra",
+      "rank": "Member",
+      "points": 900,
+      "kd": "1.6",
+      "joined": "2023-05-30",
+      "wars": 8,
+      "bio": "[Example member] Newer blood, climbing the ranks fast."
+    }
+  ]
 }

@@ -1,5 +1,65 @@
 {
   "gang": "TOMAN",
   "created": "2019-11-03",
-  "members": []
+  "members": [
+    {
+      "name": "Takeshi",
+      "rank": "Leader",
+      "points": 5600,
+      "kd": "4.3",
+      "joined": "2019-11-03",
+      "wars": 44,
+      "bio": "[Example member — replace with your real roster] Honor above all. Toman's first and only leader.",
+      "tier": "lead",
+      "badges": [
+        "Founder",
+        "War Hero",
+        "100 Wins"
+      ]
+    },
+    {
+      "name": "Haru",
+      "rank": "Co-Leader",
+      "points": 4700,
+      "kd": "3.8",
+      "joined": "2020-01-20",
+      "wars": 37,
+      "bio": "[Example member] Keeps discipline and loyalty at the core.",
+      "tier": "lead",
+      "badges": [
+        "Co-Leader"
+      ]
+    },
+    {
+      "name": "Ren",
+      "rank": "Elite",
+      "points": 3400,
+      "kd": "3.0",
+      "joined": "2021-03-11",
+      "wars": 26,
+      "bio": "[Example member] Honors the Toman name in every war.",
+      "tier": "high",
+      "badges": [
+        "Elite"
+      ]
+    },
+    {
+      "name": "Shiori",
+      "rank": "Veteran",
+      "points": 2050,
+      "kd": "2.3",
+      "joined": "2021-10-29",
+      "wars": 18,
+      "bio": "[Example member] Loyal since the early days."
+    },
+    {
+      "name": "Kaito",
+      "rank": "Member",
+      "points": 880,
+      "kd": "1.5",
+      "joined": "2023-07-04",
+      "wars": 7,
+      "bio": "[Example member] Earning his place."
+    }
+  ]
 }

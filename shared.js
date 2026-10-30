@@ -72,11 +72,11 @@
 
   /* ---------- chrome ---------- */
   CS.chrome = function (active) {
-    var items = [['index.html', 'Hub', 'hub'], ['asuka.html', 'ASUKA', 'asuka'], ['zm.html', 'ZM', 'zm'], ['toman.html', 'TOMAN', 'toman'], ['events.html', 'Events', 'events'], ['rules.html', 'Rules', 'rules'], ['gallery.html', 'Gallery', 'gallery'], ['leaderboard.html', 'Leaderboard', 'leaderboard'], ['apply.html', 'Apply', 'apply']];
+    var items = [['index.html', 'Hub', 'hub'], ['asuka.html', 'ASUKA', 'asuka'], ['zm.html', 'ZM', 'zm'], ['toman.html', 'TOMAN', 'toman'], ['events.html', 'Events', 'events'], ['rules.html', 'Rules', 'rules'], ['gallery.html', 'Gallery', 'gallery'], ['timeline.html', 'Timeline', 'timeline'], ['members.html', 'Members', 'members'], ['leaderboard.html', 'Leaderboard', 'leaderboard'], ['apply.html', 'Apply', 'apply']];
     function lk(it, cls) { var on = it[2] === active; return '<a href="' + it[0] + '" class="' + (cls || '') + (on ? ' on' : '') + '"' + (on ? ' aria-current="page"' : '') + '>' + it[1] + '</a>'; }
-    var gangOn = ['asuka', 'zm', 'toman'].indexOf(active) > -1, expOn = ['events', 'rules', 'gallery', 'cosmos'].indexOf(active) > -1;
+    var gangOn = ['asuka', 'zm', 'toman'].indexOf(active) > -1, expOn = ['events', 'rules', 'gallery', 'cosmos', 'timeline'].indexOf(active) > -1;
     function ddm(label, on, inner) { return '<div class="dd"><button type="button" class="ddb' + (on ? ' on' : '') + '" aria-haspopup="true" aria-expanded="false">' + label + ' &#9662;</button><div class="ddm">' + inner + '</div></div>'; }
-    var links = lk(items[0]) + ddm('Gangs', gangOn, lk(items[1]) + lk(items[2]) + lk(items[3])) + ddm('Explore', expOn, lk(items[4]) + lk(items[5]) + lk(items[6]) + lk(['cosmos.html', 'Cosmos', 'cosmos'])) + lk(items[7]) + lk(items[8], 'nav-cta');
+    var links = lk(items[0]) + ddm('Gangs', gangOn, lk(items[1]) + lk(items[2]) + lk(items[3])) + ddm('Explore', expOn, lk(items[4]) + lk(items[5]) + lk(items[6]) + lk(['cosmos.html', 'Cosmos', 'cosmos']) + lk(items[7]) + lk(items[8])) + lk(items[9]) + lk(items[10], 'nav-cta');
     var nav = document.createElement('header');
     nav.className = 'nav'; nav.id = 'nav';
     nav.innerHTML = '<div class="wrap nav-in"><a class="brand" href="index.html">Celestial &#10022; Syndicate</a><button type="button" class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mainlinks"><i></i></button><nav class="links" id="mainlinks" aria-label="Main">' + links + '</nav></div>';
@@ -247,11 +247,62 @@
       $$('.kick, .eyebrow').forEach(function (k) { if (k.children.length === 0 && k.textContent.length < 40) so.observe(k); });
     }
   };
+
+  /* ---------- command palette (Ctrl/Cmd+K or /) ---------- */
+  CS.cmdPalette = function () {
+    var PAGES = [
+      ['index.html', 'Hub', 'Home'], ['asuka.html', 'ASUKA', 'Gang'], ['zm.html', 'ZM', 'Gang'], ['toman.html', 'TOMAN', 'Gang'],
+      ['cosmos.html', 'Cosmos', 'Explore'], ['events.html', 'Wars & Events', 'Explore'], ['rules.html', 'Rules & Ranks', 'Explore'],
+      ['gallery.html', 'Gallery', 'Explore'], ['timeline.html', 'Timeline', 'Explore'], ['members.html', 'Members', 'Directory'],
+      ['leaderboard.html', 'Leaderboard', 'Page'], ['apply.html', 'Apply to Join', 'Page']
+    ];
+    var ov = document.createElement('div'); ov.className = 'cmdv'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    ov.innerHTML = '<div class="cmdbox"><div class="cmdin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search pages or members..." aria-label="Search" autocomplete="off"><kbd>Esc</kbd></div><div class="cmdlist" id="cmdlist"></div></div>';
+    document.body.appendChild(ov);
+    var inp = $('input', ov), list = $('#cmdlist', ov), sel = 0, items = [], membersCache = null, open = false;
+    function loadMembers() {
+      if (membersCache) return Promise.resolve(membersCache);
+      return CS.load(Object.keys(GANGS)).then(function (d) {
+        membersCache = [];
+        Object.keys(d).forEach(function (k) { var ids = CS.ids(d[k].members); (d[k].members || []).forEach(function (m, i) { membersCache.push({ page: CS.mlink(k, ids[i]), title: m.name, sub: d[k].gang + ' · ' + (m.rank || 'Member'), initial: (m.name || '?').charAt(0).toUpperCase() }); }); });
+        return membersCache;
+      }).catch(function () { return []; });
+    }
+    function render(q) {
+      q = (q || '').toLowerCase().trim();
+      var pageItems = PAGES.filter(function (p) { return !q || p[1].toLowerCase().indexOf(q) > -1; }).map(function (p) { return { page: p[0], title: p[1], sub: p[2], initial: p[1].charAt(0) }; });
+      var memberItems = q.length >= 2 && membersCache ? membersCache.filter(function (m) { return m.title.toLowerCase().indexOf(q) > -1; }).slice(0, 8) : [];
+      items = pageItems.concat(memberItems);
+      sel = 0;
+      if (!items.length) { list.innerHTML = '<div class="cmdempty">Kuch nahi mila. Try a page or member name.</div>'; return; }
+      list.innerHTML = items.map(function (it, i) { return '<a class="cmdit' + (i === 0 ? ' sel' : '') + '" href="' + CS.esc(it.page) + '" data-i="' + i + '"><span class="ci">' + CS.esc(it.initial) + '</span><span><b>' + CS.esc(it.title) + '</b><span>' + CS.esc(it.sub) + '</span></span></a>'; }).join('');
+    }
+    function mark() { $$('.cmdit', list).forEach(function (el, i) { el.classList.toggle('sel', i === sel); }); var s2 = $('.cmdit.sel', list); if (s2 && s2.scrollIntoView) s2.scrollIntoView({ block: 'nearest' }); }
+    function show() { open = true; ov.classList.add('open'); render(''); inp.value = ''; setTimeout(function () { inp.focus(); }, 10); loadMembers(); }
+    function hide() { open = false; ov.classList.remove('open'); }
+    ov.addEventListener('click', function (e) { if (e.target === ov) hide(); });
+    inp.addEventListener('input', function () { render(inp.value); });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { hide(); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(items.length - 1, sel + 1); mark(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); mark(); }
+      if (e.key === 'Enter') { var it = items[sel]; if (it) location.href = it.page; }
+    });
+    addEventListener('keydown', function (e) {
+      var tag = (document.activeElement && document.activeElement.tagName || '').toLowerCase();
+      var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || (document.activeElement && document.activeElement.isContentEditable);
+      if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || (e.key === '/' && !typing && !open)) { e.preventDefault(); open ? hide() : show(); }
+    });
+    var trig = document.createElement('button'); trig.type = 'button'; trig.className = 'cmdtrig'; trig.setAttribute('aria-label', 'Search');
+    trig.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span class="lbl">Quick search</span><kbd>' + (coarse ? 'Tap' : (navigator.platform && /Mac/.test(navigator.platform) ? '⌘K' : 'Ctrl K')) + '</kbd>';
+    trig.addEventListener('click', show);
+    document.body.appendChild(trig);
+  };
   CS.init = function (cfg) {
     cfg = cfg || {};
     CS.chrome(cfg.active);
     if (cfg.boot) CS.boot(cfg.boot);
-    CS.reveal(); CS.tilt(); CS.counters(); CS.cursor(); CS.fx();
+    CS.reveal(); CS.tilt(); CS.counters(); CS.cursor(); CS.fx(); CS.cmdPalette();
     $$('[data-scroll]').forEach(function (b) { b.addEventListener('click', function () { var t = document.getElementById(b.dataset.scroll); if (t) t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); }); });
   };
 })();

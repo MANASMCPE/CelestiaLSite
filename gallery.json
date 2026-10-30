@@ -1,3 +1,10 @@
 {
-  "items": []
+  "items": [
+    { "src": "img/g-hub-war.svg", "caption": "Alliance war night" },
+    { "src": "img/g-hub-victory.svg", "caption": "Victory formation — all four gangs" },
+    { "src": "img/g-asuka-unit.svg", "caption": "ASUKA — Unit 02 lineup" },
+    { "src": "img/g-asuka-blade.svg", "caption": "ASUKA — blade core training" },
+    { "src": "img/g-zm-bloom.svg", "caption": "ZM — Zero Mercy night" },
+    { "src": "img/g-toman-torii.svg", "caption": "TOMAN — under the torii" }
+  ]
 }

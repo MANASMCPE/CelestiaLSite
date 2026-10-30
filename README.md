@@ -101,3 +101,29 @@ Jab koi player Apply form submit kare, uski poori info Discord par aa jati hai.
 Dono ek saath on ho sakte hain. Redis na bhi ho, Discord notification pahunchte hi application "sent" maani jati hai.
 
 **Instagram:** Instagram website se seedha message bhejne ki permission nahi deta, isliye submit ke baad "Send on Instagram" button aata hai. Wo application ka text copy karke `instagram.com/scripterzmonk` ki DM khol deta hai; player paste karke send karta hai. Username badalna ho to `apply.html` me `IG = 'scripterzmonk'`.
+
+---
+
+## v4 — Members, placeholder data, SEO
+
+- **`/members`**: poore alliance ka ek searchable, filterable directory — naam se search karo, gang se filter karo, points/name/newest se sort karo. Har card member profile par le jaata hai.
+- **Example data**: `celestial.json`, `asuka.json`, `zm.json`, `toman.json`, `events.json`, `gallery.json` sab mein ab example entries hain, taaki site khaali na dikhe. Har member/event ke bio mein **"[Example member]"** likha hai — in sabko apne real roster, events aur Discord link se badal do. Gallery mein 6 generated banner images hain (`img/` folder) — unki jagah apne real screenshots/clips daal sakte ho.
+- **SEO**: har page par Open Graph tags, `robots.txt` aur `sitemap.xml` add kiye. `sitemap.xml` mein domain `celestial-syndicate.vercel.app` likha hai — apna asli Vercel domain set hone ke baad usse badal dena.
+
+---
+
+## v5 — Command palette, Timeline, 404, installable
+
+- **Quick search**: har page par bottom-left mein ek search button hai (ya `Ctrl/Cmd+K`, ya sirf `/` dabao). Isse koi bhi page ya member turant dhoondh sakte ho — arrow keys se move karo, Enter se khulta hai.
+- **`/timeline`**: gangs ke founding dates aur `events.json` ke events ko milakar ek history timeline banata hai, year by year.
+- **Custom 404 page**: galat URL par ab theme wala 404 page aata hai, Hub aur Members ka link ke saath. Vercel ismein static `404.html` ko apne aap serve karta hai.
+- **Installable (PWA-lite)**: site ka apna icon (`icons/`, `favicon.ico`) aur `manifest.json` hai, taaki phone par "Add to Home Screen" karne par proper app jaisa icon aur naam dikhe.
+
+---
+
+## v5 — Command palette, Timeline, PWA, 404
+
+- **Quick search (`Ctrl/Cmd+K` ya `/`)**: har page par neeche-left corner mein ek "Quick search" button hai. Isse koi bhi page ya member turant dhoondh sakte ho, arrow keys se navigate karke Enter dabao.
+- **`/timeline`**: gangs ke founding dates aur `events.json` ke events ko milakar ek saal-wise history banata hai. Naya event add karoge to wo apne aap timeline mein aa jayega.
+- **PWA**: site ab phone par "Add to Home Screen" se install ho sakti hai (`manifest.json` + generated icons `icons/`). `favicon.ico` bhi add kiya.
+- **Custom 404 page**: galat URL par jaane se ab ek themed "404 — Ye galaxy mein nahi hai" page dikhta hai, Hub aur Members ke links ke saath.

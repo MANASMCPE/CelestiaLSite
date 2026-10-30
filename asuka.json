@@ -1,5 +1,64 @@
 {
   "gang": "ASUKA",
   "created": "2021-02-14",
-  "members": []
+  "members": [
+    {
+      "name": "Rex",
+      "rank": "Leader",
+      "points": 4900,
+      "kd": "3.9",
+      "joined": "2021-02-14",
+      "wars": 33,
+      "bio": "[Example member — replace with your real roster] Unit 02 commander. Fast, sharp, no second chances.",
+      "tier": "lead",
+      "badges": [
+        "Founder",
+        "War Hero"
+      ]
+    },
+    {
+      "name": "Kira",
+      "rank": "Co-Leader",
+      "points": 4100,
+      "kd": "3.4",
+      "joined": "2021-04-18",
+      "wars": 28,
+      "bio": "[Example member] Second-in-command, runs the HUD ops.",
+      "tier": "lead",
+      "badges": [
+        "Co-Leader"
+      ]
+    },
+    {
+      "name": "Zed",
+      "rank": "Elite",
+      "points": 2950,
+      "kd": "2.9",
+      "joined": "2022-01-09",
+      "wars": 19,
+      "bio": "[Example member] Known for blade-fast reflexes in wars.",
+      "tier": "high",
+      "badges": [
+        "Elite"
+      ]
+    },
+    {
+      "name": "Mira",
+      "rank": "Veteran",
+      "points": 1800,
+      "kd": "2.1",
+      "joined": "2022-08-23",
+      "wars": 14,
+      "bio": "[Example member] Reliable in every skirmish."
+    },
+    {
+      "name": "Jax",
+      "rank": "Member",
+      "points": 750,
+      "kd": "1.4",
+      "joined": "2023-11-02",
+      "wars": 6,
+      "bio": "[Example member] Still earning stripes."
+    }
+  ]
 }

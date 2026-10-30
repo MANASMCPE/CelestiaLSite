@@ -1,3 +1,28 @@
 {
-  "events": []
+  "events": [
+    {
+      "title": "Celestial x ASUKA Alliance Clash",
+      "type": "war",
+      "date": "2026-11-22T20:00:00+05:30",
+      "gangs": [
+        "celestial",
+        "asuka"
+      ],
+      "desc": "[Example event] Full alliance turnout requested."
+    },
+    {
+      "title": "Monthly Alliance Meet",
+      "type": "meet",
+      "date": "2026-11-08T19:00:00+05:30",
+      "desc": "[Example event] Voice call on Discord, all leaders attend."
+    },
+    {
+      "title": "Celestial vs Rival Gang",
+      "type": "war",
+      "date": "2026-09-14T20:00:00+05:30",
+      "vs": "Celestial Syndicate vs Nightfall",
+      "result": "Won 7-3",
+      "desc": "[Example event, already happened]"
+    }
+  ]
 }

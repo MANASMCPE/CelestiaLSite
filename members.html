@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Members | Celestial Syndicate</title>
+<meta name="description" content="Full member directory across Celestial Syndicate, ASUKA, ZM and TOMAN.">
+<meta name="theme-color" content="#04050d">
+<meta property="og:title" content="Members | Celestial Syndicate">
+<meta property="og:description" content="Full member directory across Celestial Syndicate, ASUKA, ZM and TOMAN.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <section style="padding-top:20px">
+    <div class="sh rv"><div class="kick">Every member, one place</div><h2>Members</h2></div>
+    <div class="mdbar rv">
+      <input type="search" id="q" placeholder="Search by name..." aria-label="Search members">
+      <select id="g" aria-label="Filter by gang">
+        <option value="all">All gangs</option>
+        <option value="celestial">Celestial Syndicate</option>
+        <option value="asuka">ASUKA</option>
+        <option value="zm">ZM</option>
+        <option value="toman">TOMAN</option>
+      </select>
+      <select id="sort" aria-label="Sort by">
+        <option value="points">Sort: Points</option>
+        <option value="name">Sort: Name</option>
+        <option value="joined">Sort: Newest</option>
+      </select>
+    </div>
+    <div class="mdgrid" id="grid"><div class="msg">Loading members...</div></div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="planets.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'members', boot: { title: 'Members', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#7fd6ff" stroke-width="2"><circle cx="46" cy="60" r="16"/><circle cx="94" cy="60" r="16" stroke="#ff5fa8"/><circle cx="70" cy="94" r="16" stroke="#a468ff"/></g></svg>', msgs: [[0, 'Calling the roster'], [40, 'Counting heads'], [80, 'Lining up cards']], dur: 1700 } });
+CS.scene(CS.scenes.stars);
+var ALL = [], KEYS = ['celestial', 'asuka', 'zm', 'toman'], q = '', gf = 'all', sort = 'points';
+CS.load(KEYS).then(function (d) {
+  var ids = {};
+  KEYS.forEach(function (k) { ids[k] = CS.ids(d[k].members); (d[k].members || []).forEach(function (m, i) { ALL.push({ m: m, k: k, gang: d[k].gang, id: ids[k][i] }); }); });
+  render();
+}).catch(function (e) { document.getElementById('grid').innerHTML = '<div class="msg err">Could not load members: ' + CS.esc(e.message) + '</div>'; });
+function render() {
+  var list = ALL.filter(function (x) { return (gf === 'all' || x.k === gf) && (!q || x.m.name.toLowerCase().indexOf(q) > -1); });
+  list.sort(function (a, b) {
+    if (sort === 'name') return a.m.name.localeCompare(b.m.name);
+    if (sort === 'joined') return (b.m.joined || '').localeCompare(a.m.joined || '');
+    return (b.m.points || 0) - (a.m.points || 0);
+  });
+  var el = document.getElementById('grid');
+  if (!list.length) { el.innerHTML = '<div class="empty"><b>Koi member nahi mila</b>Search ya filter badal ke dekho.</div>'; return; }
+  el.innerHTML = list.map(function (x, i) {
+    return '<a class="mcard rv" data-d="' + Math.min(i * 30, 300) + '" href="' + CS.esc(CS.mlink(x.k, x.id)) + '"><div class="mav">' + CS.esc((x.m.name || '?').charAt(0).toUpperCase()) + '</div><h3>' + CS.esc(x.m.name) + '</h3><div class="mg">' + CS.esc(x.gang) + ' &middot; ' + CS.esc(x.m.rank || 'Member') + '</div><div class="mp"><b>' + (x.m.points || 0).toLocaleString() + '</b><span>points</span></div></a>';
+  }).join('');
+  CS.reveal();
+}
+document.getElementById('q').addEventListener('input', function (e) { q = e.target.value.trim().toLowerCase(); render(); });
+document.getElementById('g').addEventListener('change', function (e) { gf = e.target.value; render(); });
+document.getElementById('sort').addEventListener('change', function (e) { sort = e.target.value; render(); });
+</script>
+</body>
+</html>

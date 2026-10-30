@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Timeline | Celestial Syndicate</title>
+<meta name="description" content="The history of Celestial Syndicate and its alliance, from founding to now.">
+<meta name="theme-color" content="#04050d">
+<meta property="og:title" content="Timeline | Celestial Syndicate">
+<meta property="og:description" content="The history of Celestial Syndicate and its alliance, from founding to now.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;500;700&family=Tenor+Sans&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>:root { --veil: radial-gradient(ellipse at 50% 30%, transparent 0 20%, rgba(4,5,13,.5) 60%, rgba(4,5,13,.88) 100%); } main { padding-top: 56px; }</style>
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("cs_boot"))document.documentElement.classList.add("no-boot")}catch(e){}</script>
+</head>
+<body>
+<div class="veil"></div>
+<main class="wrap">
+  <section style="padding-top:20px">
+    <div class="sh rv"><div class="kick">How we got here</div><h2>Timeline</h2></div>
+    <div class="tl" id="tl"><div class="msg">Loading history...</div></div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="shared.js"></script>
+<script src="planets.js"></script>
+<script src="scenes.js"></script>
+<script>
+CS.init({ active: 'timeline', boot: { title: 'Timeline', art: '<svg viewBox="0 0 140 140" width="140" height="140"><g fill="none" stroke="#7fd6ff" stroke-width="2"><line x1="70" y1="20" x2="70" y2="120"><animate attributeName="y2" values="20;120" dur="1.6s" repeatCount="indefinite"/></line><circle cx="70" cy="40" r="6" fill="#ff5fa8" stroke="none"/><circle cx="70" cy="80" r="6" fill="#a468ff" stroke="none"/><circle cx="70" cy="110" r="6" fill="#f0c05a" stroke="none"/></g></svg>', msgs: [[0, 'Opening the archives'], [40, 'Sorting by date'], [80, 'Lighting the trail']], dur: 1700 } });
+CS.scene(CS.scenes.stars);
+var KEYS = ['celestial', 'asuka', 'zm', 'toman'];
+Promise.all([CS.load(KEYS), CS.json('events.json').catch(function () { return { events: [] }; })]).then(function (r) {
+  var d = r[0], ev = r[1].events || [], rows = [];
+  KEYS.forEach(function (k) { rows.push({ date: d[k].created, title: d[k].gang + ' founded', desc: k === 'celestial' ? 'The syndicate begins.' : 'Joins the alliance network.', cls: 'found' }); });
+  ev.forEach(function (e) { rows.push({ date: e.date, title: e.title, desc: e.result ? 'Result: ' + e.result : (e.desc || ''), cls: e.type === 'war' ? 'war' : '' }); });
+  rows = rows.filter(function (r2) { return r2.date; }).sort(function (a, b) { return a.date.localeCompare(b.date); });
+  var el = document.getElementById('tl');
+  if (!rows.length) { el.innerHTML = '<div class="empty"><b>Abhi history khaali hai</b>events.json mein events add karo, wo yahan timeline mein aa jayenge.</div>'; return; }
+  var out = '', year = '';
+  rows.forEach(function (r2) {
+    var y = r2.date.slice(0, 4);
+    if (y !== year) { year = y; out += '<div class="tlyear rv">' + y + '</div>'; }
+    out += '<div class="tlit ' + r2.cls + ' rv"><div class="tld">' + CS.fmtDate(r2.date.slice(0, 10)) + '</div><h3>' + CS.esc(r2.title) + '</h3>' + (r2.desc ? '<p>' + CS.esc(r2.desc) + '</p>' : '') + '</div>';
+  });
+  el.innerHTML = out; CS.reveal();
+}).catch(function (e) { document.getElementById('tl').innerHTML = '<div class="msg err">Could not load timeline: ' + CS.esc(e.message) + '</div>'; });
+</script>
+</body>
+</html>
